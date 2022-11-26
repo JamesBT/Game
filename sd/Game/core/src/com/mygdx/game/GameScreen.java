@@ -1,8 +1,6 @@
 package com.mygdx.game;
 
 public class GameScreen extends BaseScreen{
-    BaseGame game;
-
     public GameScreen(BaseGame game) {
         super(game);
     }
