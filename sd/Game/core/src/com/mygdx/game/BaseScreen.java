@@ -13,7 +13,9 @@ public abstract class BaseScreen implements Screen, InputProcessor {
         game = g;
     }
 
-    // SCREEN METHODS
+    public abstract void create();
+    public abstract void update(float delta);
+
 
     @Override
     public void show() {}
