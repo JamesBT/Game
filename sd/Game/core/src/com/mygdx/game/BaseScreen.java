@@ -7,6 +7,11 @@ import com.badlogic.gdx.graphics.GL20;
 
 
 public abstract class BaseScreen implements Screen, InputProcessor {
+    protected BaseGame game;
+
+    public BaseScreen(BaseGame g){
+        game = g;
+    }
 
     // SCREEN METHODS
 
