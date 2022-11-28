@@ -1,20 +1,39 @@
-package com.mygdx.game;
+package com.mygdx.game.Characters;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
-import com.mygdx.game.Characters.Entities;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
-public class Player extends AnimatedActor implements Entities{
+public class Enemy1 extends Enemy{
     private Vector2 velocity;
     private Vector2 acceleration;
     private float maxSpeed;
     private float deceleration;
     private boolean autoAngle;
 
-    @Override
-    public void setVelocityXY(float vx, float vy){
-        velocity.set(vx, vy);
+    private SpriteBatch batch;
+
+    private float elapsedTime = 0f;
+
+    private int temp;
+
+    public Enemy1() {
+        velocity = new Vector2();
+        acceleration = new Vector2();
+        maxSpeed = 200;
+        deceleration = 0;
+        autoAngle = false;
+        batch = new SpriteBatch();
+
     }
+
+    //VELOCITY METHODS
+    @Override
+    public void setVelocityXY(float vx, float vy) { velocity.set(vx, vy); }
 
     @Override
     public void addVelocityXY(float vx, float vy) { velocity.add(vx, vy); }
@@ -22,7 +41,8 @@ public class Player extends AnimatedActor implements Entities{
     @Override
     public void setVelocityAS(float angleDeg, float speed) {
         velocity.x = speed * MathUtils.cosDeg(angleDeg);
-        velocity.y = speed * MathUtils.sinDeg(angleDeg); }
+        velocity.y = speed * MathUtils.sinDeg(angleDeg);
+    }
 
     //SPEED METHODS
     @Override
@@ -72,7 +92,6 @@ public class Player extends AnimatedActor implements Entities{
     public void act(float delta) {
         super.act(delta);
         velocity.add(acceleration.x * delta, acceleration.y * delta); //apply acceleration
-
         //decrease velocity when not accelerating
         if (acceleration.len() < 0.01) {
             float decelerateAmount = deceleration * delta;
@@ -88,10 +107,13 @@ public class Player extends AnimatedActor implements Entities{
         }
         //apply velocity
         moveBy(velocity.x * delta, velocity.y * delta);
-
+        //rotate img when moving
+        if (autoAngle && getSpeed() > 0.1) {
+            setRotation(getMotionAngle());
+        }
     }
 
-    public void copy(Player original) {
+    public void copy(Enemy1 original) {
         super.copy(original);
         this.velocity = new Vector2(original.velocity);
         this.acceleration = new Vector2(original.acceleration);
@@ -100,10 +122,20 @@ public class Player extends AnimatedActor implements Entities{
         this.autoAngle = original.autoAngle;
     }
 
-    public Player clone() {
-        Player newbie = new Player();
+    @Override
+    public Enemy1 clone() {
+        Enemy1 newbie = new Enemy1();
         newbie.copy(this);
         return newbie;
     }
 
+    @Override
+    public int getTemp() {
+        return temp;
+    }
+
+    @Override
+    public void setTemp(int temp) {
+        this.temp = temp;
+    }
 }

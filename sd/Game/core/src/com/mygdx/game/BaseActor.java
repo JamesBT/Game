@@ -23,13 +23,14 @@ public class BaseActor extends Group {
         parentList = null;
     }
 
-    public void destory(){
+    public void destroy(){
         remove();
         if (parentList != null) {
             parentList.remove(this);
         }
     }
 
+    //basically set texture
     public void setTexture(Texture t){
         int w = t.getWidth();
         int h = t.getHeight();
@@ -38,7 +39,7 @@ public class BaseActor extends Group {
         textureRegion.setRegion(t);
     }
 
-
+    //invincible box/kotak yang ada disekitar player/enemy
     public void setRectangleBoundary() {
         float w = getWidth();
         float h = getHeight();
@@ -47,6 +48,7 @@ public class BaseActor extends Group {
         boundingPolygon.setOrigin(getOriginX(), getOriginY());
     }
 
+    //buat lingkaran - jek tak pahami
     public void setEllipseBoundary(boolean status) {
         int n = 4; //number of vertices
         float w = 36;
@@ -61,12 +63,14 @@ public class BaseActor extends Group {
         boundingPolygon.setOrigin(getOriginX(), getOriginY());
     }
 
+    //ngeset polygon
     public Polygon getBoundingPolygon() {
         boundingPolygon.setPosition(getX(), getY());
         boundingPolygon.setRotation(getRotation());
         return boundingPolygon;
     }
 
+    //basically overlap
     public boolean overlaps(BaseActor other, boolean resolve) {
         Polygon polygon1 = this.getBoundingPolygon();
         Polygon polygon2 = other.getBoundingPolygon();

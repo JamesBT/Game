@@ -1,20 +1,29 @@
-package com.mygdx.game;
+package com.mygdx.game.Characters;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
-import com.mygdx.game.Characters.Entities;
 import com.badlogic.gdx.math.Vector2;
+import com.mygdx.game.AnimatedActor;
 
-public class Player extends AnimatedActor implements Entities{
+public class Enemy extends AnimatedActor implements Entities{
     private Vector2 velocity;
     private Vector2 acceleration;
     private float maxSpeed;
     private float deceleration;
     private boolean autoAngle;
+    private int temp;
 
-    @Override
-    public void setVelocityXY(float vx, float vy){
-        velocity.set(vx, vy);
+    public Enemy() {
+        velocity = new Vector2();
+        acceleration = new Vector2();
+        maxSpeed = 200;
+        deceleration = 0;
+        autoAngle = false;
     }
+
+    //VELOCITY METHODS
+    @Override
+    public void setVelocityXY(float vx, float vy) { velocity.set(vx, vy); }
 
     @Override
     public void addVelocityXY(float vx, float vy) { velocity.add(vx, vy); }
@@ -22,7 +31,8 @@ public class Player extends AnimatedActor implements Entities{
     @Override
     public void setVelocityAS(float angleDeg, float speed) {
         velocity.x = speed * MathUtils.cosDeg(angleDeg);
-        velocity.y = speed * MathUtils.sinDeg(angleDeg); }
+        velocity.y = speed * MathUtils.sinDeg(angleDeg);
+    }
 
     //SPEED METHODS
     @Override
@@ -72,7 +82,6 @@ public class Player extends AnimatedActor implements Entities{
     public void act(float delta) {
         super.act(delta);
         velocity.add(acceleration.x * delta, acceleration.y * delta); //apply acceleration
-
         //decrease velocity when not accelerating
         if (acceleration.len() < 0.01) {
             float decelerateAmount = deceleration * delta;
@@ -88,10 +97,13 @@ public class Player extends AnimatedActor implements Entities{
         }
         //apply velocity
         moveBy(velocity.x * delta, velocity.y * delta);
-
+        //rotate img when moving
+        if (autoAngle && getSpeed() > 0.1) {
+            setRotation(getMotionAngle());
+        }
     }
 
-    public void copy(Player original) {
+    public void copy(Enemy original) {
         super.copy(original);
         this.velocity = new Vector2(original.velocity);
         this.acceleration = new Vector2(original.acceleration);
@@ -100,10 +112,17 @@ public class Player extends AnimatedActor implements Entities{
         this.autoAngle = original.autoAngle;
     }
 
-    public Player clone() {
-        Player newbie = new Player();
+    public Enemy clone() {
+        Enemy newbie = new Enemy();
         newbie.copy(this);
         return newbie;
     }
 
+    public int getTemp() {
+        return temp;
+    }
+
+    public void setTemp(int temp) {
+        this.temp = temp;
+    }
 }
