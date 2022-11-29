@@ -28,10 +28,10 @@ public class MainMenuScreen extends ApplicationAdapter implements Screen {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, camera.viewportWidth, camera.viewportHeight);
 
-        playButtonInactive = new Texture("labels/play.png");
-        playButtonActive = new Texture("labels/play2.png");
-        exitButtonInactive = new Texture("labels/exit.png");
-        exitButtonActive = new Texture("labels/exit2.png");
+        playButtonInactive = new Texture("labels/starthover.png");
+        playButtonActive = new Texture("labels/start.png");
+        exitButtonInactive = new Texture("labels/exithover.png");
+        exitButtonActive = new Texture("labels/exit.png");
         judul = new Texture("labels/judul.png");
 
         sound = Gdx.audio.newMusic(Gdx.files.internal("sound & music/loading.ogg"));
@@ -56,30 +56,30 @@ public class MainMenuScreen extends ApplicationAdapter implements Screen {
         bitmapFont.setColor(1.0f, 1.0f, 1.0f, 1.0f);
 
         float x = camera.viewportWidth / 2 + 170;
-        float y = camera.viewportHeight / 2 + 100;
+        float y = camera.viewportHeight / 2 + 120;
         float x2 = x - 300 / 2;
-        float y2 = camera.viewportHeight / 2 + 30;
+        float y2 = camera.viewportHeight / 2 + 10;
 
         game.batch.draw(judul, camera.viewportWidth / 2 + 95, camera.viewportHeight / 2 + 160, 450, 450);
 
         //play button
-        if(Gdx.input.getX() < x2 + 400 &&  Gdx.input.getX() > x2 + 200 && Gdx.input.getY() < y + 130 && Gdx.input.getY() > camera.viewportHeight / 2 + 160 )
+        if(Gdx.input.getX() < x2 + 450 &&  Gdx.input.getX() > x2 + 150 && Gdx.input.getY() < y + 165 && Gdx.input.getY() > y+65)
         {
-            game.batch.draw(playButtonActive, x, y, 300,300);
+            game.batch.draw(playButtonActive, x, y, 300,250);
             if (Gdx.input.isTouched()) {
                 click.play();
                 sound.stop();
-                game.setScreen(new GameScreen(game));
+//                game.setScreen(new GameScreen(game));
                 dispose();
             }
         } else {
-            game.batch.draw(playButtonInactive, x, y, 300,300);
+            game.batch.draw(playButtonInactive, x, y, 300,250);
         }
 
         //exit
-        if(Gdx.input.getX() < x2 + 400 &&  Gdx.input.getX() > x2 + 200 && Gdx.input.getY() < y2 + 280 && Gdx.input.getY() > y2 + 210 )
+        if(Gdx.input.getX() < x2 + 450 &&  Gdx.input.getX() > x2 + 150 && Gdx.input.getY() < y2 + 385 && Gdx.input.getY() > y2 + 285 )
         {
-            game.batch.draw(exitButtonActive,x ,y2 , 300,300);
+            game.batch.draw(exitButtonActive,x ,y2 , 300,250);
 
             if (Gdx.input.isTouched()) {
                 click.play();
@@ -88,7 +88,7 @@ public class MainMenuScreen extends ApplicationAdapter implements Screen {
             }
         } else
         {
-            game.batch.draw(exitButtonInactive,x ,y2 , 300,300);
+            game.batch.draw(exitButtonInactive,x ,y2 , 300,250);
         }
         game.batch.end();
     }
