@@ -1,7 +1,13 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -20,6 +26,19 @@ public class GameScreen extends BaseScreen{
     private OrthographicCamera tiledCamera;
     private OrthogonalTiledMapRenderer tiledMapRenderer;
 
+    //buat music
+    private Music bgm;
+
+    //buat animation
+    private SpriteBatch batch;
+    private TextureAtlas tALeft;
+    private TextureAtlas tARight;
+    private TextureAtlas tAUp;
+    private TextureAtlas tADown;
+    private Animation<TextureRegion> animationLeft;
+    private Animation<TextureRegion> animationRight;
+    private Animation<TextureRegion> animationUp;
+    private Animation<TextureRegion> animationDown;
     //buat asset tambahan
 
     public GameScreen(BaseGame game) {
@@ -73,8 +92,10 @@ public class GameScreen extends BaseScreen{
 
 
         //buat music
-        //animasi player
-        //animasi enemy
+        bgm = Gdx.audio.newMusic(Gdx.files.internal("sound & music/music.ogg"));
+        bgm.setVolume(0.1f);
+        bgm.setLooping(true);
+        bgm.play();
 
         //buat map dan kamera
         tiledMap = new TmxMapLoader().load("map/map.tmx");
@@ -82,6 +103,15 @@ public class GameScreen extends BaseScreen{
         tiledCamera = new OrthographicCamera();
         tiledCamera.setToOrtho(false,viewWidth,viewHeight);
         tiledCamera.update();
+
+        tALeft = new TextureAtlas(Gdx.files.internal("sprites/left.pack"));
+        tARight = new TextureAtlas(Gdx.files.internal("sprites/right.pack"));
+        tAUp = new TextureAtlas(Gdx.files.internal("sprites/up.pack"));
+        tADown = new TextureAtlas(Gdx.files.internal("sprites/down.pack"));
+        animationLeft = new Animation<TextureRegion>(1/7f,tALeft.getRegions());
+        animationRight = new Animation<TextureRegion>(1/7f,tARight.getRegions());
+        animationUp = new Animation<TextureRegion>(1/7f,tAUp.getRegions());
+        animationDown = new Animation<TextureRegion>(1/7f,tADown.getRegions());
         //buat layer walls/physic
         //buat node?
 
