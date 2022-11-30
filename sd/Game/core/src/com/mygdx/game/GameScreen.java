@@ -8,10 +8,16 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.MapObjects;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.game.Characters.*;
+
+import java.util.ArrayList;
 
 
 public class GameScreen extends BaseScreen{
@@ -25,6 +31,7 @@ public class GameScreen extends BaseScreen{
     private TiledMap tiledMap;
     private OrthographicCamera tiledCamera;
     private OrthogonalTiledMapRenderer tiledMapRenderer;
+    private ArrayList<BaseActor> wallList;
 
     //buat music
     private Music bgm;
@@ -51,13 +58,13 @@ public class GameScreen extends BaseScreen{
         player = new Player();
         float t=0.15f;
         player.storeAnimation("down", GameUtils.parseSpriteSheet(
-                "sprites/down.png", 4, 2, new int[] {0,1}, t, Animation.PlayMode.LOOP_PINGPONG));
+                "sprites/down.png", 4, 2, new int[] {0,1,2,3}, t, Animation.PlayMode.LOOP_PINGPONG));
         player.storeAnimation("left", GameUtils.parseSpriteSheet(
-                "sprites/left.png", 4, 2, new int[] {0,1 }, t, Animation.PlayMode.LOOP_PINGPONG));
+                "sprites/left.png", 4, 2, new int[] {0,1,2,3}, t, Animation.PlayMode.LOOP_PINGPONG));
         player.storeAnimation("right", GameUtils.parseSpriteSheet(
-                "sprites/right.png", 4, 2, new int[] {0,1 }, t, Animation.PlayMode.LOOP_PINGPONG));
+                "sprites/right.png", 4, 2, new int[] {0,1,2,3}, t, Animation.PlayMode.LOOP_PINGPONG));
         player.storeAnimation("up", GameUtils.parseSpriteSheet(
-                "sprites/up.png", 4, 2, new int[] { 0,1 }, t, Animation.PlayMode.LOOP_PINGPONG));
+                "sprites/up.png", 4, 2, new int[] {0,1,2,3}, t, Animation.PlayMode.LOOP_PINGPONG));
         player.setSize(48, 48);
         player.setEllipseBoundary(status);
         mainStage.addActor(player);
@@ -112,7 +119,50 @@ public class GameScreen extends BaseScreen{
         animationRight = new Animation<TextureRegion>(1/7f,tARight.getRegions());
         animationUp = new Animation<TextureRegion>(1/7f,tAUp.getRegions());
         animationDown = new Animation<TextureRegion>(1/7f,tADown.getRegions());
+
         //buat layer walls/physic
+        tiledMap = new TmxMapLoader().load("map/map011.tmx");
+        tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
+        tiledCamera = new OrthographicCamera();
+        tiledCamera.setToOrtho(false, viewWidth, viewHeight);
+        tiledCamera.update();
+
+        //buat object dalam peta
+        MapObjects objects = tiledMap.getLayers().get("ObjectData").getObjects();
+        for (MapObject object : objects) {
+            String name = object.getName();
+
+            RectangleMapObject rectangleMapObject = (RectangleMapObject) object;
+            Rectangle r = rectangleMapObject.getRectangle();
+
+            switch (name) {
+                case "player":
+                    player.setPosition(r.x, r.y);
+                    break;
+                case "tesEnemy":
+                    tesEnemy.setPosition(r.x, r.y);
+                    break;
+                case "tesEnemy2":
+                    tesEnemy2.setPosition(r.x, r.y);
+                    break;
+                default:
+                    System.err.println("Unknown tilemap object " + name);
+            }
+        }
+
+        //buat tembok
+        objects = tiledMap.getLayers().get("PhysicsData").getObjects();
+        for (MapObject object : objects) {
+            RectangleMapObject rectangleMapObject = (RectangleMapObject) object;
+            Rectangle r = rectangleMapObject.getRectangle();
+
+            BaseActor solid = new BaseActor();
+            solid.setPosition(r.x, r.y);
+            solid.setSize(r.width, r.height);
+            solid.setRectangleBoundary();
+            wallList.add(solid);
+        }
+
         //buat node?
 
     }

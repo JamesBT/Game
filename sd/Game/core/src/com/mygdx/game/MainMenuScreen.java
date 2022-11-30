@@ -69,7 +69,7 @@ public class MainMenuScreen extends ApplicationAdapter implements Screen {
             if (Gdx.input.isTouched()) {
                 click.play();
                 sound.stop();
-//                game.setScreen(new GameScreen(game));
+                game.setScreen(new GameScreen(game));
                 dispose();
             }
         } else {
