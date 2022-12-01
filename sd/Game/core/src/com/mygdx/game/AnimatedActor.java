@@ -1,12 +1,13 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import java.util.HashMap;
 
-public class AnimatedActor extends BaseActor {
+public class AnimatedActor extends BaseActor{
     private float elapsedTime;
     private Animation activeAnimation;
     private String activeAnimationName;
@@ -29,6 +30,13 @@ public class AnimatedActor extends BaseActor {
         }
     }
 
+    public void storeAnimation(String name, Texture texture) {
+        TextureRegion textureRegion = new TextureRegion(texture);
+        TextureRegion[] frames = { textureRegion };
+        Animation animation = new Animation(1.0f, frames);
+        storeAnimation(name, animation);
+    }
+
     public void setActiveAnimation(String name) {
         if (!animationStorage.containsKey(name)) {
             System.out.println("No animation: " + name);
@@ -40,6 +48,10 @@ public class AnimatedActor extends BaseActor {
         activeAnimationName = name;
         activeAnimation = animationStorage.get(name);
         elapsedTime = 0;
+    }
+
+    public String getActiveAnimationName() {
+        return activeAnimationName;
     }
 
     public void pauseAnimation() {
@@ -83,5 +95,5 @@ public class AnimatedActor extends BaseActor {
         newbie.copy(this);
         return newbie;
     }
-
 }
+

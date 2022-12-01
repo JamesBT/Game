@@ -4,11 +4,16 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
-public class BaseGame extends Game{
+public class BaseGame extends Game {
+
     Skin skin;
     public SpriteBatch batch;
 
-    public BaseGame(){skin=new Skin();}
+
+
+    public BaseGame() {
+        skin = new Skin();
+        }
 
     public void create(){
         batch = new SpriteBatch();
@@ -16,5 +21,6 @@ public class BaseGame extends Game{
     }
 
     @Override
-    public void dispose(){skin.dispose();}
+    public void dispose() { skin.dispose(); }
+
 }

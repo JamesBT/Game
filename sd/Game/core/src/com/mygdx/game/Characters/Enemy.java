@@ -5,7 +5,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.AnimatedActor;
 
-public class Enemy extends AnimatedActor implements Entities{
+public class Enemy extends AnimatedActor implements Entities {
     private Vector2 velocity;
     private Vector2 acceleration;
     private float maxSpeed;
@@ -21,6 +21,10 @@ public class Enemy extends AnimatedActor implements Entities{
         autoAngle = false;
     }
 
+    public void skill(){
+        Gdx.app.log("Id", "Hit");
+    }
+
     //VELOCITY METHODS
     @Override
     public void setVelocityXY(float vx, float vy) { velocity.set(vx, vy); }
@@ -33,6 +37,7 @@ public class Enemy extends AnimatedActor implements Entities{
         velocity.x = speed * MathUtils.cosDeg(angleDeg);
         velocity.y = speed * MathUtils.sinDeg(angleDeg);
     }
+
 
     //SPEED METHODS
     @Override

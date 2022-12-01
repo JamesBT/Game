@@ -1,22 +1,22 @@
 package com.mygdx.game.Characters;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
-public class Enemy2 extends Enemy{
+public class Enemy2 extends Enemy {
     private Vector2 velocity;
     private Vector2 acceleration;
     private float maxSpeed;
     private float deceleration;
     private boolean autoAngle;
-
     private SpriteBatch batch;
-
     private float elapsedTime = 0f;
-
-    private int temp;
 
     public Enemy2() {
         velocity = new Vector2();
@@ -25,64 +25,35 @@ public class Enemy2 extends Enemy{
         deceleration = 0;
         autoAngle = false;
         batch = new SpriteBatch();
-
     }
 
     //VELOCITY METHODS
-    @Override
     public void setVelocityXY(float vx, float vy) { velocity.set(vx, vy); }
-
-    @Override
     public void addVelocityXY(float vx, float vy) { velocity.add(vx, vy); }
-
-    @Override
     public void setVelocityAS(float angleDeg, float speed) {
         velocity.x = speed * MathUtils.cosDeg(angleDeg);
-        velocity.y = speed * MathUtils.sinDeg(angleDeg);
-    }
+        velocity.y = speed * MathUtils.sinDeg(angleDeg); }
 
     //SPEED METHODS
-    @Override
     public float getSpeed() { return velocity.len(); }
-
-    @Override
     public void setSpeed(float s) { velocity.setLength(s); }
-
-    @Override
     public void setMaxSpeed(float ms) { maxSpeed = ms; }
 
     //ANGLE METHODS
-    @Override
     public float getMotionAngle() {
-        return MathUtils.atan2(velocity.y, velocity.x) * MathUtils.radiansToDegrees;
-    }
-
-    @Override
+        return MathUtils.atan2(velocity.y, velocity.x) * MathUtils.radiansToDegrees; }
     public void setAutoAngle(boolean b) { autoAngle = b; }
 
     //ACCELERATION METHODS
-    @Override
     public void setAccelerationXY(float ax, float ay) { acceleration.set(ax, ay); }
-
-    @Override
     public void addAccelerationXY(float ax, float ay) { acceleration.add(ax, ay); }
-
-    @Override
     public void setAccelerationAS(float angleDeg, float speed) {
         acceleration.x = speed * MathUtils.cosDeg(angleDeg);
-        acceleration.y = speed * MathUtils.sinDeg(angleDeg);
-    }
-
-    @Override
+        acceleration.y = speed * MathUtils.sinDeg(angleDeg); }
     public void addAccelerationAS(float angleDeg, float speed) { acceleration.add(
             speed * MathUtils.cosDeg(angleDeg),
-            speed * MathUtils.sinDeg(angleDeg));
-    }
-
-    @Override
+            speed * MathUtils.sinDeg(angleDeg)); }
     public void accelerateForward(float speed) { setAccelerationAS(getRotation(), speed); }
-
-    @Override
     public void setDeceleration(float d) { deceleration = d; }
 
     @Override
@@ -119,20 +90,10 @@ public class Enemy2 extends Enemy{
         this.autoAngle = original.autoAngle;
     }
 
-    @Override
     public Enemy2 clone() {
         Enemy2 newbie = new Enemy2();
         newbie.copy(this);
         return newbie;
     }
-
-    @Override
-    public int getTemp() {
-        return temp;
-    }
-
-    @Override
-    public void setTemp(int temp) {
-        this.temp = temp;
-    }
 }
+

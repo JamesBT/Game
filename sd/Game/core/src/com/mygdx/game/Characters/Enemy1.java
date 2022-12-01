@@ -1,6 +1,7 @@
 package com.mygdx.game.Characters;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -8,7 +9,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
-public class Enemy1 extends Enemy{
+public class Enemy1 extends Enemy {
     private Vector2 velocity;
     private Vector2 acceleration;
     private float maxSpeed;
@@ -18,7 +19,6 @@ public class Enemy1 extends Enemy{
     private SpriteBatch batch;
 
     private float elapsedTime = 0f;
-
     private int temp;
 
     public Enemy1() {
@@ -28,7 +28,6 @@ public class Enemy1 extends Enemy{
         deceleration = 0;
         autoAngle = false;
         batch = new SpriteBatch();
-
     }
 
     //VELOCITY METHODS

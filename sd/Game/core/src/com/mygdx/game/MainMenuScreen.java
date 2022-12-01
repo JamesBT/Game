@@ -12,12 +12,12 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 
 public class MainMenuScreen extends ApplicationAdapter implements Screen {
     final BaseGame game;
+
     OrthographicCamera camera;
 
     Texture playButtonActive, playButtonInactive;
     Texture exitButtonInactive, exitButtonActive;
     Texture judul;
-
     Music sound;
     Sound click;
     BitmapFont bitmapFont;
@@ -34,7 +34,7 @@ public class MainMenuScreen extends ApplicationAdapter implements Screen {
         exitButtonActive = new Texture("labels/exit.png");
         judul = new Texture("labels/judul.png");
 
-        sound = Gdx.audio.newMusic(Gdx.files.internal("sound & music/loading.ogg"));
+        sound = Gdx.audio.newMusic(Gdx.files.internal("sound & music/stranger-things-menu.ogg"));
         sound.setVolume(0.1f);
         sound.play();
 
@@ -44,7 +44,9 @@ public class MainMenuScreen extends ApplicationAdapter implements Screen {
     }
 
     @Override
-    public void show() {}
+    public void show() {
+
+    }
 
     @Override
     public void render(float delta) {
@@ -94,16 +96,24 @@ public class MainMenuScreen extends ApplicationAdapter implements Screen {
     }
 
     @Override
-    public void resize(int width, int height) {}
+    public void resize(int width, int height) {
+
+    }
 
     @Override
-    public void pause() {}
+    public void pause() {
+
+    }
 
     @Override
-    public void resume() {}
+    public void resume() {
+
+    }
 
     @Override
-    public void hide() {}
+    public void hide() {
+
+    }
 
     @Override
     public void dispose() {

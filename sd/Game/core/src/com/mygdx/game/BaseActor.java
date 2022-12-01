@@ -16,22 +16,39 @@ public class BaseActor extends Group {
     public Polygon boundingPolygon;
     public ArrayList<? extends BaseActor> parentList;
 
-    public BaseActor(){
+    public BaseActor() {
         super();
         textureRegion = new TextureRegion();
         boundingPolygon = null;
         parentList = null;
     }
 
-    public void destroy(){
+    public void setParentList(ArrayList<? extends BaseActor> pl) {
+        parentList = pl;
+    }
+
+    public void destroy() {
         remove();
         if (parentList != null) {
             parentList.remove(this);
         }
     }
 
-    //basically set texture
-    public void setTexture(Texture t){
+    public void setOriginCenter() {
+        if (getWidth() == 0) {
+            System.err.println("Error: actor size not set");
+        }
+        setOrigin(getWidth() / 2, getHeight() / 2);
+    }
+
+    public void moveToOrigin(BaseActor target) {
+        this.setPosition(
+                target.getX() + target.getOriginX() - this.getOriginX(),
+                target.getY() + target.getOriginY() - this.getOriginY());
+    }
+
+    //set texture basically
+    public void setTexture(Texture t) {
         int w = t.getWidth();
         int h = t.getHeight();
         setWidth(w);
@@ -39,7 +56,7 @@ public class BaseActor extends Group {
         textureRegion.setRegion(t);
     }
 
-    //invincible box/kotak yang ada disekitar player/enemy
+    //ini basically kotak disekitar player
     public void setRectangleBoundary() {
         float w = getWidth();
         float h = getHeight();
@@ -48,7 +65,7 @@ public class BaseActor extends Group {
         boundingPolygon.setOrigin(getOriginX(), getOriginY());
     }
 
-    //buat lingkaran - jek tak pahami
+    //ini buat lingkaran jek tak pahami
     public void setEllipseBoundary(boolean status) {
         int n = 4; //number of vertices
         float w = 36;
@@ -125,3 +142,4 @@ public class BaseActor extends Group {
         return newbie;
     }
 }
+

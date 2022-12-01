@@ -1,10 +1,10 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.math.MathUtils;
-import com.mygdx.game.Characters.Entities;
 import com.badlogic.gdx.math.Vector2;
+import com.mygdx.game.Characters.Entities;
 
-public class Player extends AnimatedActor implements Entities{
+public class Player extends AnimatedActor implements Entities {
     private Vector2 velocity;
     private Vector2 acceleration;
     private float maxSpeed;
@@ -19,10 +19,9 @@ public class Player extends AnimatedActor implements Entities{
         autoAngle = false;
     }
 
+    //VELOCITY METHODS
     @Override
-    public void setVelocityXY(float vx, float vy){
-        velocity.set(vx, vy);
-    }
+    public void setVelocityXY(float vx, float vy) { velocity.set(vx, vy); }
 
     @Override
     public void addVelocityXY(float vx, float vy) { velocity.add(vx, vy); }
@@ -113,5 +112,5 @@ public class Player extends AnimatedActor implements Entities{
         newbie.copy(this);
         return newbie;
     }
-
 }
+

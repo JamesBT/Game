@@ -9,18 +9,17 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
-
 public abstract class BaseScreen implements Screen, InputProcessor {
+
     protected BaseGame game;
     protected Stage mainStage;
     protected Stage uiStage;
     protected Table uiTable;
-    private boolean paused;
     public final int viewWidth = 800;
     public final int viewHeight = 600;
+    private boolean paused;
 
-
-    public BaseScreen(BaseGame g){
+    public BaseScreen(BaseGame g) {
         game = g;
 
         mainStage = new Stage(new FitViewport(viewWidth, viewHeight));
@@ -41,10 +40,13 @@ public abstract class BaseScreen implements Screen, InputProcessor {
     public abstract void create();
     public abstract void update(float delta);
 
-    // screen pause
+    // PAUSE METHODS
+
     public boolean isPaused() { return paused; }
     public void setPaused(boolean b) { paused = b; }
     public void togglePaused() { paused = !paused; }
+
+    // SCREEN METHODS
 
     @Override
     public void show() {}
