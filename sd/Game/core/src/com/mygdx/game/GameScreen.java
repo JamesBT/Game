@@ -1,8 +1,11 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -14,6 +17,7 @@ import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.game.Characters.*;
 
@@ -32,6 +36,16 @@ public class GameScreen extends BaseScreen{
     private OrthographicCamera tiledCamera;
     private OrthogonalTiledMapRenderer tiledMapRenderer;
     private ArrayList<BaseActor> wallList;
+    private int tileSize = 32;
+    private int tileCountWidth = 30;
+    private int tileCountHeight = 30;
+    final int mapWidth = tileSize * tileCountWidth;
+    final int mapHeight = tileSize * tileCountHeight;
+
+    //buat pause
+    private int[] backgroundLayers = { 0, 1 };
+    private int[] foregroundLayers = { 2 };
+    private float elapsedTime = 0f;
 
     //buat music
     private Music bgm;
@@ -58,13 +72,13 @@ public class GameScreen extends BaseScreen{
         player = new Player();
         float t=0.15f;
         player.storeAnimation("down", GameUtils.parseSpriteSheet(
-                "sprites/down.png", 4, 2, new int[] {0,1,2,3}, t, Animation.PlayMode.LOOP_PINGPONG));
+                "sprites/down.png", 4, 1, new int[] {0,1,2,3}, t, Animation.PlayMode.LOOP_PINGPONG));
         player.storeAnimation("left", GameUtils.parseSpriteSheet(
-                "sprites/left.png", 4, 2, new int[] {0,1,2,3}, t, Animation.PlayMode.LOOP_PINGPONG));
+                "sprites/left.png", 4, 1, new int[] {0,1,2,3}, t, Animation.PlayMode.LOOP_PINGPONG));
         player.storeAnimation("right", GameUtils.parseSpriteSheet(
-                "sprites/right.png", 4, 2, new int[] {0,1,2,3}, t, Animation.PlayMode.LOOP_PINGPONG));
+                "sprites/right.png", 4, 1, new int[] {0,1,2,3}, t, Animation.PlayMode.LOOP_PINGPONG));
         player.storeAnimation("up", GameUtils.parseSpriteSheet(
-                "sprites/up.png", 4, 2, new int[] {0,1,2,3}, t, Animation.PlayMode.LOOP_PINGPONG));
+                "sprites/up.png", 4, 1, new int[] {0,1,2,3}, t, Animation.PlayMode.LOOP_PINGPONG));
         player.setSize(48, 48);
         player.setEllipseBoundary(status);
         mainStage.addActor(player);
@@ -99,17 +113,19 @@ public class GameScreen extends BaseScreen{
 
 
         //buat music
-        bgm = Gdx.audio.newMusic(Gdx.files.internal("sound & music/music.ogg"));
+        bgm = Gdx.audio.newMusic(Gdx.files.internal("sound & music/miami-game.ogg"));
         bgm.setVolume(0.1f);
         bgm.setLooping(true);
         bgm.play();
 
         //buat map dan kamera
-        tiledMap = new TmxMapLoader().load("map/map.tmx");
+        tiledMap = new TmxMapLoader().load("map/testing1.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
         tiledCamera = new OrthographicCamera();
         tiledCamera.setToOrtho(false,viewWidth,viewHeight);
         tiledCamera.update();
+
+        wallList = new ArrayList<BaseActor>();
 
         tALeft = new TextureAtlas(Gdx.files.internal("sprites/left.pack"));
         tARight = new TextureAtlas(Gdx.files.internal("sprites/right.pack"));
@@ -121,14 +137,14 @@ public class GameScreen extends BaseScreen{
         animationDown = new Animation<TextureRegion>(1/7f,tADown.getRegions());
 
         //buat layer walls/physic
-        tiledMap = new TmxMapLoader().load("map/map011.tmx");
+        tiledMap = new TmxMapLoader().load("map/testing1.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
         tiledCamera = new OrthographicCamera();
         tiledCamera.setToOrtho(false, viewWidth, viewHeight);
         tiledCamera.update();
 
         //buat object dalam peta
-        MapObjects objects = tiledMap.getLayers().get("ObjectData").getObjects();
+        MapObjects objects = tiledMap.getLayers().get("Object").getObjects();
         for (MapObject object : objects) {
             String name = object.getName();
 
@@ -151,7 +167,7 @@ public class GameScreen extends BaseScreen{
         }
 
         //buat tembok
-        objects = tiledMap.getLayers().get("PhysicsData").getObjects();
+        objects = tiledMap.getLayers().get("Physic").getObjects();
         for (MapObject object : objects) {
             RectangleMapObject rectangleMapObject = (RectangleMapObject) object;
             Rectangle r = rectangleMapObject.getRectangle();
@@ -169,7 +185,93 @@ public class GameScreen extends BaseScreen{
 
     @Override
     public void update(float delta){
+        float playerSpeed = 500;
+        float tesEnemySpeed = 500;
+        player.setVelocityXY(0, 0);
+        tesEnemy.setVelocityXY(0,0);
+        tesEnemy2.setVelocityXY(0,0);
 
+        //input handling PLAYER
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+            player.setVelocityXY(-playerSpeed, 0);
+            player.setActiveAnimation("left");
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+            player.setVelocityXY(playerSpeed, 0);
+            player.setActiveAnimation("right");
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+            player.setVelocityXY(0, playerSpeed);
+            player.setActiveAnimation("up");
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+            player.setVelocityXY(0, -playerSpeed);
+            player.setActiveAnimation("down");
+        }
+        if (player.getSpeed() < 1) {
+            player.pauseAnimation();
+            player.setAnimationFrame(1);
+        } else {
+            player.startAnimation();
+        }
+
+        //collision detection
+        for (BaseActor wall : wallList) {
+            player.overlaps(wall, true);
+            tesEnemy.overlaps(wall, true);
+            tesEnemy2.overlaps(wall, true);
+        }
+
+        //Overlaps Player and Enemy
+//        if(player.overlaps(tesEnemy, false) || player.overlaps(tesEnemy2, false)){
+////            game.setScreen(new GameOver(game));
+//            bgm.stop();
+//        }
+
+        //camera adjustment
+        Camera mainCamera = mainStage.getCamera();
+
+        //center camera on player
+        mainCamera.position.x = player.getX() + player.getOriginX();
+        mainCamera.position.y = player.getY() + player.getOriginY();
+
+        //bound camera to layout
+        mainCamera.position.x = MathUtils.clamp(
+                mainCamera.position.x, viewWidth / 2, mapWidth - viewWidth / 2);
+        mainCamera.position.y = MathUtils.clamp(
+                mainCamera.position.y, viewHeight / 2, mapHeight - viewHeight / 2);
+        mainCamera.update();
+
+        //adjust tilemap camera to stay in sync with main camera
+        tiledCamera.position.x = mainCamera.position.x;
+        tiledCamera.position.y = mainCamera.position.y;
+        tiledCamera.update();
+        tiledMapRenderer.setView(tiledCamera);
+
+    }
+
+    @Override
+    public void render(float delta){
+        uiStage.act(delta);
+        if (!isPaused()) {
+            mainStage.act(delta);
+            update(delta);
+        }
+
+        Gdx.gl.glClearColor(0, 0, 0, 0);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        tiledMapRenderer.render(backgroundLayers);
+        mainStage.draw();
+        tiledMapRenderer.render(foregroundLayers);
+        uiStage.draw();
+        elapsedTime += Gdx.graphics.getDeltaTime();
+    }
+
+    @Override
+    public boolean keyDown(int keycode) {
+        if (keycode == Input.Keys.P) togglePaused();
+        if (keycode == Input.Keys.R) game.setScreen(new GameScreen(game));
+        return false;
     }
 
     @Override
@@ -179,8 +281,8 @@ public class GameScreen extends BaseScreen{
 
     @Override
     public void dispose(){
-//        bgm.dispose();
-//        batch.dispose();
+        bgm.dispose();
+        batch.dispose();
     }
 
 }

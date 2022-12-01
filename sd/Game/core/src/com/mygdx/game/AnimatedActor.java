@@ -29,7 +29,7 @@ public class AnimatedActor extends BaseActor {
         }
     }
 
-    private void setActiveAnimation(String name) {
+    public void setActiveAnimation(String name) {
         if (!animationStorage.containsKey(name)) {
             System.out.println("No animation: " + name);
             return;

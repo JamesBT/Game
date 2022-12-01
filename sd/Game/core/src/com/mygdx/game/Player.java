@@ -11,6 +11,14 @@ public class Player extends AnimatedActor implements Entities{
     private float deceleration;
     private boolean autoAngle;
 
+    public Player() {
+        velocity = new Vector2();
+        acceleration = new Vector2();
+        maxSpeed = 200;
+        deceleration = 0;
+        autoAngle = false;
+    }
+
     @Override
     public void setVelocityXY(float vx, float vy){
         velocity.set(vx, vy);
