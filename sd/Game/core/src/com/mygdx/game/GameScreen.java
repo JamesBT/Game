@@ -75,13 +75,13 @@ public class GameScreen extends BaseScreen {
         player = new Player();
         float t = 0.15f;
         player.storeAnimation("down", GameUtils.parseSpriteSheet(
-                "sprites/down.png", 4, 2, new int[] {0,1}, t, PlayMode.LOOP_PINGPONG));
+                "sprites/down.png", 8, 2, new int[] {0,1,2,3}, t, PlayMode.LOOP_PINGPONG));
         player.storeAnimation("left", GameUtils.parseSpriteSheet(
-                "sprites/left.png", 4, 2, new int[] {0,1 }, t, PlayMode.LOOP_PINGPONG));
+                "sprites/left.png", 8, 2, new int[] {0,1,2,3}, t, PlayMode.LOOP_PINGPONG));
         player.storeAnimation("right", GameUtils.parseSpriteSheet(
-                "sprites/right.png", 4, 2, new int[] {0,1 }, t, PlayMode.LOOP_PINGPONG));
+                "sprites/right.png", 8, 2, new int[] {0,1,2,3}, t, PlayMode.LOOP_PINGPONG));
         player.storeAnimation("up", GameUtils.parseSpriteSheet(
-                "sprites/up.png", 4, 2, new int[] { 0,1 }, t, PlayMode.LOOP_PINGPONG));
+                "sprites/up.png", 8, 2, new int[] {0,1,2,3}, t, PlayMode.LOOP_PINGPONG));
         player.setSize(48, 48);
         player.setEllipseBoundary(status);
         mainStage.addActor(player);
