@@ -72,16 +72,28 @@ public class GameScreen extends BaseScreen{
         player = new Player();
         float t=0.15f;
         player.storeAnimation("down", GameUtils.parseSpriteSheet(
-                "sprites/down.png", 4, 1, new int[] {0,1,2,3}, t, Animation.PlayMode.LOOP_PINGPONG));
+                "sprites/down.png", 4, 2, new int[] {0,1,2}, t, Animation.PlayMode.LOOP_PINGPONG));
         player.storeAnimation("left", GameUtils.parseSpriteSheet(
-                "sprites/left.png", 4, 1, new int[] {0,1,2,3}, t, Animation.PlayMode.LOOP_PINGPONG));
+                "sprites/left.png", 4, 2, new int[] {0,1,2}, t, Animation.PlayMode.LOOP_PINGPONG));
         player.storeAnimation("right", GameUtils.parseSpriteSheet(
-                "sprites/right.png", 4, 1, new int[] {0,1,2,3}, t, Animation.PlayMode.LOOP_PINGPONG));
+                "sprites/right.png", 4, 2, new int[] {0,1,2}, t, Animation.PlayMode.LOOP_PINGPONG));
         player.storeAnimation("up", GameUtils.parseSpriteSheet(
-                "sprites/up.png", 4, 1, new int[] {0,1,2,3}, t, Animation.PlayMode.LOOP_PINGPONG));
-        player.setSize(48, 48);
+                "sprites/up.png", 4, 2, new int[] {0,1,2}, t, Animation.PlayMode.LOOP_PINGPONG));
+        player.setSize(32, 32);
         player.setEllipseBoundary(status);
         mainStage.addActor(player);
+
+        //animasi player
+        tALeft = new TextureAtlas(Gdx.files.internal("sprites/left.pack"));
+        tARight = new TextureAtlas(Gdx.files.internal("sprites/right.pack"));
+        tAUp = new TextureAtlas(Gdx.files.internal("sprites/up.pack"));
+        tADown = new TextureAtlas(Gdx.files.internal("sprites/down.pack"));
+        animationLeft = new Animation<TextureRegion>(1/7f,tALeft.getRegions());
+        animationRight = new Animation<TextureRegion>(1/7f,tARight.getRegions());
+        animationUp = new Animation<TextureRegion>(1/7f,tAUp.getRegions());
+        animationDown = new Animation<TextureRegion>(1/7f,tADown.getRegions());
+
+
         //buat enemy
         tesEnemy = new Enemy1();
         tesEnemy.storeAnimation("down", GameUtils.parseSpriteSheet(
@@ -113,10 +125,10 @@ public class GameScreen extends BaseScreen{
 
 
         //buat music
-        bgm = Gdx.audio.newMusic(Gdx.files.internal("sound & music/miami-game.ogg"));
-        bgm.setVolume(0.1f);
-        bgm.setLooping(true);
-        bgm.play();
+//        bgm = Gdx.audio.newMusic(Gdx.files.internal("sound & music/miami-game.ogg"));
+//        bgm.setVolume(0.1f);
+//        bgm.setLooping(true);
+//        bgm.play();
 
         //buat map dan kamera
         tiledMap = new TmxMapLoader().load("map/testing1.tmx");
@@ -126,15 +138,6 @@ public class GameScreen extends BaseScreen{
         tiledCamera.update();
 
         wallList = new ArrayList<BaseActor>();
-
-        tALeft = new TextureAtlas(Gdx.files.internal("sprites/left.pack"));
-        tARight = new TextureAtlas(Gdx.files.internal("sprites/right.pack"));
-        tAUp = new TextureAtlas(Gdx.files.internal("sprites/up.pack"));
-        tADown = new TextureAtlas(Gdx.files.internal("sprites/down.pack"));
-        animationLeft = new Animation<TextureRegion>(1/7f,tALeft.getRegions());
-        animationRight = new Animation<TextureRegion>(1/7f,tARight.getRegions());
-        animationUp = new Animation<TextureRegion>(1/7f,tAUp.getRegions());
-        animationDown = new Animation<TextureRegion>(1/7f,tADown.getRegions());
 
         //buat layer walls/physic
         tiledMap = new TmxMapLoader().load("map/testing1.tmx");
