@@ -4,10 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.maps.MapObject;
@@ -29,6 +26,7 @@ public class GameScreen extends BaseScreen {
     private boolean status = true;
     private Enemy tesEnemy;
     private Enemy tesEnemy2;
+
 
     //buat peta
     private TiledMap tiledMap;
@@ -244,6 +242,9 @@ public class GameScreen extends BaseScreen {
         tiledCamera.position.y = mainCamera.position.y;
         tiledCamera.update();
         tiledMapRenderer.setView(tiledCamera);
+
+        System.out.println("X: "+player.getX());
+//        System.out.println("Y: "+player.getY());
     }
 
     @Override
@@ -265,6 +266,7 @@ public class GameScreen extends BaseScreen {
 
         batch.begin();
         batch.end();
+
     }
 
     @Override

@@ -32,7 +32,7 @@ public class MainMenuScreen extends ApplicationAdapter implements Screen {
         playButtonActive = new Texture("labels/start.png");
         exitButtonInactive = new Texture("labels/exithover.png");
         exitButtonActive = new Texture("labels/exit.png");
-        judul = new Texture("labels/judul.png");
+        judul = new Texture("labels/title.png");
 
         sound = Gdx.audio.newMusic(Gdx.files.internal("sound & music/stranger-things-menu.ogg"));
         sound.setVolume(0.1f);
