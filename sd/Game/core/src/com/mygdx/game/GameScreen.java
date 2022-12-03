@@ -15,9 +15,10 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.Characters.*;
 
+import javax.xml.soap.Node;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class GameScreen extends BaseScreen {
@@ -26,6 +27,20 @@ public class GameScreen extends BaseScreen {
     private boolean status = true;
     private Enemy tesEnemy;
     private Enemy tesEnemy2;
+
+    //initialize node
+    private Nodes node0 = new Nodes();
+    private Nodes node1 = new Nodes();
+    private Nodes node2 = new Nodes();
+    private Nodes node3 = new Nodes();
+    private Nodes node4 = new Nodes();
+    private Nodes node6 = new Nodes();
+    private Nodes node7 = new Nodes();
+    private Nodes node8 = new Nodes();
+    private Nodes node9 = new Nodes();
+    private Nodes node10 = new Nodes();
+    private Nodes node11 = new Nodes();
+    private Nodes node12 = new Nodes();
 
 
     //buat peta
@@ -138,6 +153,7 @@ public class GameScreen extends BaseScreen {
 
         wallList = new ArrayList<BaseActor>();
 
+
         //buat object dalam peta
         MapObjects objects = tiledMap.getLayers().get("Object").getObjects();
         for (MapObject object : objects) {
@@ -156,9 +172,60 @@ public class GameScreen extends BaseScreen {
                 case "tesEnemy2":
                     tesEnemy2.setPosition(r.x, r.y);
                     break;
+
+                //titik node
+                case "0":
+                    node0.setX(96);
+                    node0.setY(512);
+                    break;
+                case "1":
+                    node1.setX(96);
+                    node1.setY(288);
+                    break;
+                case "2":
+                    node2.setX(320);
+                    node2.setY(512);
+                    break;
+                case "3":
+                    node3.setX(320);
+                    node3.setY(288);
+                    break;
+                case "4":
+                    node4.setX(96);
+                    node4.setY(96);
+                    break;
+                case "6":
+                    node6.setX(448);
+                    node6.setY(96);
+                    break;
+                case "7":
+                    node7.setX(608);
+                    node7.setY(288);
+                    break;
+                case "8":
+                    node8.setX(608);
+                    node8.setY(512);
+                    break;
+                case "9":
+                    node9.setX(832);
+                    node9.setY(288);
+                    break;
+                case "10":
+                    node10.setX(832);
+                    node10.setY(96);
+                    break;
+                case "11":
+                    node11.setX(832);
+                    node11.setY(512);
+                    break;
+                case "12":
+                    node12.setX(448);
+                    node12.setY(288);
+                    break;
                 default:
                     System.err.println("Unknown tilemap object " + name);
             }
+
         }
 
         //buat tembok
@@ -243,8 +310,47 @@ public class GameScreen extends BaseScreen {
         tiledCamera.update();
         tiledMapRenderer.setView(tiledCamera);
 
-        System.out.println("X: "+player.getX());
-//        System.out.println("Y: "+player.getY());
+        //detect player dekat node berapa
+        ArrayList<Nodes> arr = new ArrayList<Nodes>();
+        arr.add(node0);
+        arr.add(node1);
+        arr.add(node2);
+        arr.add(node3);
+        arr.add(node4);
+        arr.add(node6);
+        arr.add(node7);
+        arr.add(node8);
+        arr.add(node9);
+        arr.add(node10);
+        arr.add(node11);
+        arr.add(node12);
+        double shortestx;
+        double shortesty;
+
+        Nodes tujuan;
+        for (int i=0; i<arr.size();i++){
+            double x = player.getX() - arr.get(i).getX();
+            double y = player.getY() - arr.get(i).getY();
+
+            shortestx = x;
+            shortesty = y;
+
+          if (x<shortestx || y<shortesty){
+              shortestx = x;
+              shortesty = y;
+              System.out.println(arr.get(i));
+              tujuan = arr.get(i);
+          }
+
+          //movement enemy ke node player
+            for (int j=0; j<arr.size();j++){
+                if (tesEnemy.getX() == arr.get(j).getX() && tesEnemy.getY() == arr.get(j).getY()){
+                    //mencari posisi enemy dan memprogram berjalannya enemy ke node lain (set gerak atas, bawah, kiri, kanan)
+                }
+            }
+        }
+
+
     }
 
     @Override
@@ -287,4 +393,3 @@ public class GameScreen extends BaseScreen {
         batch.dispose();
     }
 }
-
