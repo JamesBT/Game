@@ -29,18 +29,18 @@ public class GameScreen extends BaseScreen {
     private Enemy tesEnemy2;
 
     //initialize node
-    private Nodes node0 = new Nodes();
-    private Nodes node1 = new Nodes();
-    private Nodes node2 = new Nodes();
-    private Nodes node3 = new Nodes();
-    private Nodes node4 = new Nodes();
-    private Nodes node6 = new Nodes();
-    private Nodes node7 = new Nodes();
-    private Nodes node8 = new Nodes();
-    private Nodes node9 = new Nodes();
-    private Nodes node10 = new Nodes();
-    private Nodes node11 = new Nodes();
-    private Nodes node12 = new Nodes();
+    private Nodes node0;
+    private Nodes node1;
+    private Nodes node2;
+    private Nodes node3;
+    private Nodes node4;
+    private Nodes node6;
+    private Nodes node7;
+    private Nodes node8;
+    private Nodes node9;
+    private Nodes node10;
+    private Nodes node11;
+    private Nodes node12;
 
 
     //buat peta
@@ -153,6 +153,19 @@ public class GameScreen extends BaseScreen {
 
         wallList = new ArrayList<BaseActor>();
 
+        //buat node
+        node0 = new Nodes();
+        node1 = new Nodes();
+        node2 = new Nodes();
+        node3 = new Nodes();
+        node4 = new Nodes();
+        node6 = new Nodes();
+        node7 = new Nodes();
+        node8 = new Nodes();
+        node9 = new Nodes();
+        node10 = new Nodes();
+        node11 = new Nodes();
+        node12 = new Nodes();
 
         //buat object dalam peta
         MapObjects objects = tiledMap.getLayers().get("Object").getObjects();
@@ -174,51 +187,51 @@ public class GameScreen extends BaseScreen {
                     break;
 
                 //titik node
-                case "0":
+                case "node0":
                     node0.setX(96);
                     node0.setY(512);
                     break;
-                case "1":
+                case "node1":
                     node1.setX(96);
                     node1.setY(288);
                     break;
-                case "2":
+                case "node2":
                     node2.setX(320);
                     node2.setY(512);
                     break;
-                case "3":
+                case "node3":
                     node3.setX(320);
                     node3.setY(288);
                     break;
-                case "4":
+                case "node4":
                     node4.setX(96);
                     node4.setY(96);
                     break;
-                case "6":
+                case "node6":
                     node6.setX(448);
                     node6.setY(96);
                     break;
-                case "7":
+                case "node7":
                     node7.setX(608);
                     node7.setY(288);
                     break;
-                case "8":
+                case "node8":
                     node8.setX(608);
                     node8.setY(512);
                     break;
-                case "9":
+                case "node9":
                     node9.setX(832);
                     node9.setY(288);
                     break;
-                case "10":
+                case "node10":
                     node10.setX(832);
                     node10.setY(96);
                     break;
-                case "11":
+                case "node11":
                     node11.setX(832);
                     node11.setY(512);
                     break;
-                case "12":
+                case "node12":
                     node12.setX(448);
                     node12.setY(288);
                     break;
@@ -350,7 +363,28 @@ public class GameScreen extends BaseScreen {
             }
         }
 
+        //hitung jarak atr player dan musuh
+        double jrkx1 = Math.abs(player.getX() - tesEnemy.getX());
+        double jrky1 = Math.abs(player.getY() - tesEnemy.getY());
+        double jrkx2 = Math.abs(player.getX() - tesEnemy2.getX());
+        double jrky2 = Math.abs(player.getY() - tesEnemy2.getY());
+        //buat musuhe keliatan/tidak
+        if(jrkx1 < 128 && jrky1 < 128){
+            tesEnemy.setVisible(true);
+        }else{
+            tesEnemy.setVisible(false);
+        }
+        //buat musuhe keliatan/tidak
+        if(jrkx2 < 128 && jrky2 < 128){
+            tesEnemy2.setVisible(true);
+        }else{
+            tesEnemy2.setVisible(false);
+        }
 
+//        System.out.println("player x: "+player.getX());
+//        System.out.println("player y: "+player.getY());
+//        System.out.println("enemy x: "+tesEnemy.getX());
+//        System.out.println("enemy y: "+tesEnemy.getY());
     }
 
     @Override

@@ -53,19 +53,18 @@
   <object id="18" name="player" x="448" y="96" width="32" height="32"/>
   <object id="19" name="tesEnemy" x="96" y="512" width="32" height="32"/>
   <object id="20" name="tesEnemy2" x="832" y="512" width="32" height="32"/>
-  <object id="21" name="4" x="96" y="96" width="32" height="32"/>
-  <object id="23" name="6" x="448" y="96" width="32" height="32"/>
-  <object id="24" name="10" x="832" y="96" width="32" height="32"/>
-  <object id="25" name="1" x="96" y="288" width="32" height="32"/>
-  <object id="27" name="3" x="320" y="288" width="32" height="32"/>
-  <object id="28" name="12" x="448" y="288" width="32" height="32"/>
-  <object id="29" name="7" x="608" y="288" width="32" height="32"/>
-  <object id="30" name="9" x="832" y="288" width="32" height="32"/>
-  <object id="31" name="0" x="96" y="512" width="32" height="32"/>
-  <object id="32" name="2" x="320" y="512" width="32" height="32"/>
-  <object id="33" x="448" y="512" width="32" height="32"/>
-  <object id="34" name="8" x="608" y="512" width="32" height="32"/>
-  <object id="35" name="11" x="832" y="512" width="32" height="32"/>
+  <object id="21" name="node4" x="96" y="96" width="32" height="32"/>
+  <object id="23" name="node6" x="448" y="96" width="32" height="32"/>
+  <object id="24" name="node10" x="832" y="96" width="32" height="32"/>
+  <object id="25" name="node1" x="96" y="288" width="32" height="32"/>
+  <object id="27" name="node3" x="320" y="288" width="32" height="32"/>
+  <object id="28" name="node12" x="448" y="288" width="32" height="32"/>
+  <object id="29" name="node7" x="608" y="288" width="32" height="32"/>
+  <object id="30" name="node9" x="832" y="288" width="32" height="32"/>
+  <object id="31" name="node0" x="96" y="512" width="32" height="32"/>
+  <object id="32" name="node2" x="320" y="512" width="32" height="32"/>
+  <object id="34" name="node8" x="608" y="512" width="32" height="32"/>
+  <object id="35" name="node11" x="832" y="512" width="32" height="32"/>
  </objectgroup>
  <objectgroup id="2" name="Physic">
   <object id="5" x="-4.39823e-06" y="0" width="960" height="64"/>
