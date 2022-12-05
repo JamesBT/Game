@@ -79,4 +79,29 @@ public class Graph{
         return false;
     }
 
+    private void DFS(int awal){
+        boolean visited[] = new boolean[this.size];
+        for (int i = 0; i < this.size; i++) {
+            visited[i] = false;
+        }
+        this.DFS2(awal, visited);
+    }
+
+    private boolean DFS2(int awal, boolean[] visited) {
+        visited[awal] = true;
+
+        for (int i = 0; i < adjMatrix[awal].length; i++) {
+            if (adjMatrix[awal][i] == 1 && visited[i] == false) {
+                visited[i] = true;
+                this.DFS2(i, visited);
+            }
+        }
+        return false;
+    }
+
+
+
+
+
+
 }

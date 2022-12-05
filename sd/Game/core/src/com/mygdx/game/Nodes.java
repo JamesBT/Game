@@ -2,6 +2,8 @@ package com.mygdx.game;
 
 public class Nodes {
     private int x, y;
+    private int size;
+
 
     public Nodes() {
         setX(0);
@@ -28,5 +30,7 @@ public class Nodes {
     public void setY(int y) {
         this.y = y;
     }
+
+
 }
 

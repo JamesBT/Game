@@ -254,6 +254,22 @@ public class GameScreen extends BaseScreen {
             wallList.add(solid);
         }
 
+        //matrix nodes
+        int[][] matrix = {
+                //0 1  2  3  4  5  6  7  8  9 10 11 -->node ke
+                {0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0},
+                {1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0},
+                {0, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0},
+                {0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0},
+                {0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0},
+                {0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1},
+                {0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0},
+                {0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0},
+                {0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1},
+                {0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0},
+                {0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0},
+        };
     }
 
     @Override
@@ -354,13 +370,6 @@ public class GameScreen extends BaseScreen {
               System.out.println(arr.get(i));
               tujuan = arr.get(i);
           }
-
-          //movement enemy ke node player
-            for (int j=0; j<arr.size();j++){
-                if (tesEnemy.getX() == arr.get(j).getX() && tesEnemy.getY() == arr.get(j).getY()){
-                    //mencari posisi enemy dan memprogram berjalannya enemy ke node lain (set gerak atas, bawah, kiri, kanan)
-                }
-            }
         }
 
         //hitung jarak atr player dan musuh
@@ -395,6 +404,7 @@ public class GameScreen extends BaseScreen {
 //        System.out.println("player y: "+player.getY());
 //        System.out.println("enemy x: "+tesEnemy.getX());
 //        System.out.println("enemy y: "+tesEnemy.getY());
+
     }
 
     @Override
