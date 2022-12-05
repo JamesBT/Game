@@ -2,7 +2,7 @@ package com.mygdx.game;
 
 import java.util.*;
 
-public class Graph<T>{
+public class Graph{
     private int adjMatrix[][];
     private int size;
 
