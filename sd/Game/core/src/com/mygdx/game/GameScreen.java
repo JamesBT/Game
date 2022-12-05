@@ -369,17 +369,27 @@ public class GameScreen extends BaseScreen {
         double jrkx2 = Math.abs(player.getX() - tesEnemy2.getX());
         double jrky2 = Math.abs(player.getY() - tesEnemy2.getY());
         //buat musuhe keliatan/tidak
-        if(jrkx1 < 128 && jrky1 < 128){
-            tesEnemy.setVisible(true);
-        }else{
-            tesEnemy.setVisible(false);
-        }
+//        if(jrkx1 < 128 && jrky1 < 128){
+//            tesEnemy.setVisible(true);
+//        }else{
+//            tesEnemy.setVisible(false);
+//        }
         //buat musuhe keliatan/tidak
-        if(jrkx2 < 128 && jrky2 < 128){
-            tesEnemy2.setVisible(true);
-        }else{
-            tesEnemy2.setVisible(false);
-        }
+//        if(jrkx2 < 128 && jrky2 < 128){
+//            tesEnemy2.setVisible(true);
+//        }else{
+//            tesEnemy2.setVisible(false);
+//        }
+
+        //enemy movement
+        //ke kiri
+        tesEnemy.setVelocityXY(-tesEnemySpeed,0);
+        //ke kanan
+        tesEnemy.setVelocityXY(tesEnemySpeed,0);
+        //ke atas
+        tesEnemy.setVelocityXY(0,tesEnemySpeed);
+        //ke bawah
+        tesEnemy.setVelocityXY(0,-tesEnemySpeed);
 
 //        System.out.println("player x: "+player.getX());
 //        System.out.println("player y: "+player.getY());
