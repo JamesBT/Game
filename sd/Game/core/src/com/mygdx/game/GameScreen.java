@@ -34,14 +34,13 @@ public class GameScreen extends BaseScreen {
     private Nodes node2;
     private Nodes node3;
     private Nodes node4;
+    private Nodes node5;
     private Nodes node6;
     private Nodes node7;
     private Nodes node8;
     private Nodes node9;
     private Nodes node10;
     private Nodes node11;
-    private Nodes node12;
-
 
     //buat peta
     private TiledMap tiledMap;
@@ -159,13 +158,13 @@ public class GameScreen extends BaseScreen {
         node2 = new Nodes();
         node3 = new Nodes();
         node4 = new Nodes();
+        node5 = new Nodes();
         node6 = new Nodes();
         node7 = new Nodes();
         node8 = new Nodes();
         node9 = new Nodes();
         node10 = new Nodes();
         node11 = new Nodes();
-        node12 = new Nodes();
 
         //buat object dalam peta
         MapObjects objects = tiledMap.getLayers().get("Object").getObjects();
@@ -208,32 +207,32 @@ public class GameScreen extends BaseScreen {
                     node4.setY(96);
                     break;
                 case "node6":
-                    node6.setX(448);
-                    node6.setY(96);
+                    node5.setX(448);
+                    node5.setY(96);
                     break;
                 case "node7":
-                    node7.setX(608);
-                    node7.setY(288);
+                    node6.setX(608);
+                    node6.setY(288);
                     break;
                 case "node8":
-                    node8.setX(608);
-                    node8.setY(512);
+                    node7.setX(608);
+                    node7.setY(512);
                     break;
                 case "node9":
+                    node8.setX(832);
+                    node8.setY(288);
+                    break;
+                case "node11":
                     node9.setX(832);
-                    node9.setY(288);
+                    node9.setY(96);
                     break;
                 case "node10":
                     node10.setX(832);
-                    node10.setY(96);
+                    node10.setY(512);
                     break;
-                case "node11":
-                    node11.setX(832);
-                    node11.setY(512);
-                    break;
-                case "node12":
-                    node12.setX(448);
-                    node12.setY(288);
+                case "node5":
+                    node11.setX(448);
+                    node11.setY(288);
                     break;
                 default:
                     System.err.println("Unknown tilemap object " + name);
@@ -346,13 +345,13 @@ public class GameScreen extends BaseScreen {
         arr.add(node2);
         arr.add(node3);
         arr.add(node4);
+        arr.add(node5);
         arr.add(node6);
         arr.add(node7);
         arr.add(node8);
         arr.add(node9);
         arr.add(node10);
         arr.add(node11);
-        arr.add(node12);
         double shortestx;
         double shortesty;
 
