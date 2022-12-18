@@ -41,6 +41,7 @@ public class GameScreen extends BaseScreen {
     private Nodes node9;
     private Nodes node10;
     private Nodes node11;
+    private Nodes tujuan = new Nodes();
 
 
 
@@ -73,6 +74,7 @@ public class GameScreen extends BaseScreen {
     private Animation<TextureRegion> animationRight;
     private Animation<TextureRegion> animationUp;
     private Animation<TextureRegion> animationDown;
+    boolean reachnode = false;
 
     //buat asset tambahan
     BitmapFont bitmapFont;
@@ -191,7 +193,7 @@ public class GameScreen extends BaseScreen {
                 //titik node
                 case "node0":
                     node0.setX(96);
-                    node0.setY(512);
+                    node0.setY(96);
                     break;
                 case "node1":
                     node1.setX(96);
@@ -199,7 +201,7 @@ public class GameScreen extends BaseScreen {
                     break;
                 case "node2":
                     node2.setX(320);
-                    node2.setY(512);
+                    node2.setY(96);
                     break;
                 case "node3":
                     node3.setX(320);
@@ -207,7 +209,7 @@ public class GameScreen extends BaseScreen {
                     break;
                 case "node4":
                     node4.setX(96);
-                    node4.setY(96);
+                    node4.setY(512);
                     break;
                 case "node5":
                     node5.setX(448);
@@ -215,7 +217,7 @@ public class GameScreen extends BaseScreen {
                     break;
                 case "node6":
                     node6.setX(448);
-                    node6.setY(96);
+                    node6.setY(512);
                     break;
                 case "node7":
                     node7.setX(608);
@@ -223,7 +225,7 @@ public class GameScreen extends BaseScreen {
                     break;
                 case "node8":
                     node8.setX(608);
-                    node8.setY(512);
+                    node8.setY(96);
                     break;
                 case "node9":
                     node9.setX(832);
@@ -231,11 +233,11 @@ public class GameScreen extends BaseScreen {
                     break;
                 case "node10":
                     node10.setX(832);
-                    node10.setY(512);
+                    node10.setY(96);
                     break;
                 case "node11":
                     node11.setX(832);
-                    node11.setY(96);
+                    node11.setY(512);
                     break;
 
                 default:
@@ -356,25 +358,42 @@ public class GameScreen extends BaseScreen {
         arr.add(node9);
         arr.add(node10);
         arr.add(node11);
-        double shortestx;
-        double shortesty;
 
-        Nodes tujuan;
+        double jarakterdekat = 10000;
+        double jarak = 0;
         for (int i=0; i<arr.size();i++){
-            double x = player.getX() - arr.get(i).getX();
-            double y = player.getY() - arr.get(i).getY();
-
-            shortestx = x;
-            shortesty = y;
-
-          if (x<shortestx || y<shortesty){
-              shortestx = x;
-              shortesty = y;
-              System.out.println(arr.get(i));
-              tujuan = arr.get(i);
-          }
+            jarak = Math.sqrt(Math.pow(player.getX()-arr.get(i).getX(),2) + Math.pow(player.getY() - arr.get(i).getY(),2));
+            if(jarak<64){
+                System.out.println("Node X:"+arr.get(i).getX());
+                System.out.println("Node Y:"+arr.get(i).getY());
+            }
+//            double x = Math.abs(player.getX() - arr.get(i).getX());
+//            double y = Math.abs(player.getY() - arr.get(i).getY());
+//            if(x < 64){
+//                if(y<64){
+//                    System.out.println("AA");
+//                    if(x < shortestx){
+//                        shortestx = x;
+//                        tujuan = arr.get(i);
+//                    }
+//                }
+//            }
+//            if(x<64 && y<64){
+////                if (x<shortestx || y<shortesty && !reachnode){
+////                    shortestx = x;
+////                    shortesty = y;
+////                    tujuan = arr.get(i);
+////                    System.out.println(i);
+////                }
+//                System.out.println("dekat node");
+//            }else{
+////                shortestx = 0;
+////                shortesty = 0;
+////                tujuan = arr.get(i);
+//                System.out.println("jauh dari node");
+//            }
         }
-
+        System.out.println("AAAAA");
         //hitung jarak atr player dan musuh
         double jrkx1 = Math.abs(player.getX() - tesEnemy.getX());
         double jrky1 = Math.abs(player.getY() - tesEnemy.getY());
@@ -403,8 +422,8 @@ public class GameScreen extends BaseScreen {
         //ke bawah
         tesEnemy.setVelocityXY(0,-tesEnemySpeed);
 
-//        System.out.println("player x: "+player.getX());
-//        System.out.println("player y: "+player.getY());
+        System.out.println("player x: "+player.getX());
+        System.out.println("player y: "+player.getY());
 //        System.out.println("enemy x: "+tesEnemy.getX());
 //        System.out.println("enemy y: "+tesEnemy.getY());
 
