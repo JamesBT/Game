@@ -349,13 +349,13 @@ public class GameScreen extends BaseScreen {
         arr.add(node2);
         arr.add(node3);
         arr.add(node4);
+        arr.add(node5);
         arr.add(node6);
         arr.add(node7);
         arr.add(node8);
         arr.add(node9);
         arr.add(node10);
         arr.add(node11);
-        arr.add(node5);
         double shortestx;
         double shortesty;
 
