@@ -41,7 +41,7 @@ public class GameScreen extends BaseScreen {
     private Nodes node9;
     private Nodes node10;
     private Nodes node11;
-    private Nodes tujuan = new Nodes();
+    private int tujuan;
 
 
 
@@ -197,7 +197,7 @@ public class GameScreen extends BaseScreen {
                     break;
                 case "node1":
                     node1.setX(96);
-                    node1.setY(288);
+                    node1.setY(320);
                     break;
                 case "node2":
                     node2.setX(320);
@@ -205,7 +205,7 @@ public class GameScreen extends BaseScreen {
                     break;
                 case "node3":
                     node3.setX(320);
-                    node3.setY(288);
+                    node3.setY(320);
                     break;
                 case "node4":
                     node4.setX(96);
@@ -213,7 +213,7 @@ public class GameScreen extends BaseScreen {
                     break;
                 case "node5":
                     node5.setX(448);
-                    node5.setY(288);
+                    node5.setY(320);
                     break;
                 case "node6":
                     node6.setX(448);
@@ -221,7 +221,7 @@ public class GameScreen extends BaseScreen {
                     break;
                 case "node7":
                     node7.setX(608);
-                    node7.setY(288);
+                    node7.setY(320);
                     break;
                 case "node8":
                     node8.setX(608);
@@ -229,7 +229,7 @@ public class GameScreen extends BaseScreen {
                     break;
                 case "node9":
                     node9.setX(832);
-                    node9.setY(288);
+                    node9.setY(320);
                     break;
                 case "node10":
                     node10.setX(832);
@@ -364,36 +364,11 @@ public class GameScreen extends BaseScreen {
         for (int i=0; i<arr.size();i++){
             jarak = Math.sqrt(Math.pow(player.getX()-arr.get(i).getX(),2) + Math.pow(player.getY() - arr.get(i).getY(),2));
             if(jarak<64){
-                System.out.println("Node X:"+arr.get(i).getX());
-                System.out.println("Node Y:"+arr.get(i).getY());
+                tujuan = i;
             }
-//            double x = Math.abs(player.getX() - arr.get(i).getX());
-//            double y = Math.abs(player.getY() - arr.get(i).getY());
-//            if(x < 64){
-//                if(y<64){
-//                    System.out.println("AA");
-//                    if(x < shortestx){
-//                        shortestx = x;
-//                        tujuan = arr.get(i);
-//                    }
-//                }
-//            }
-//            if(x<64 && y<64){
-////                if (x<shortestx || y<shortesty && !reachnode){
-////                    shortestx = x;
-////                    shortesty = y;
-////                    tujuan = arr.get(i);
-////                    System.out.println(i);
-////                }
-//                System.out.println("dekat node");
-//            }else{
-////                shortestx = 0;
-////                shortesty = 0;
-////                tujuan = arr.get(i);
-//                System.out.println("jauh dari node");
-//            }
         }
-        System.out.println("AAAAA");
+        System.out.println(tujuan);
+
         //hitung jarak atr player dan musuh
         double jrkx1 = Math.abs(player.getX() - tesEnemy.getX());
         double jrky1 = Math.abs(player.getY() - tesEnemy.getY());
