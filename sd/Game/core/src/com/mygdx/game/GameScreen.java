@@ -53,6 +53,10 @@ public class GameScreen extends BaseScreen {
     private boolean x2sama;
     private boolean y1sama;
     private boolean y2sama;
+    private int x1tujuan;
+    private int x2tujuan;
+    private int y1tujuan;
+    private int y2tujuan;
 
     //buat peta
     private TiledMap tiledMap;
@@ -392,33 +396,38 @@ public class GameScreen extends BaseScreen {
             if (arr.get(i).getX() == arr.get(enemy1kenode).getX()){
                 x1sama = true;
                 y1sama = false;
+                y1tujuan=arr.get(i).getY();
             } else if (arr.get(i).getY() == arr.get(enemy1kenode).getY()) {
                 x1sama = false;
                 y1sama = true;
+                x1tujuan = arr.get(i).getX();
+            }
+        }
+        //buat movement enemy1
+        if(x1sama){
+            if(y1tujuan - tesEnemy.getY() > 0){
+                //ke atas
+                tesEnemy.setVelocityXY(0,tesEnemySpeed);
+            }else{
+                //ke bawah
+                tesEnemy.setVelocityXY(0,-tesEnemySpeed);
+            }
+        }else if(y1sama){
+            if(x1tujuan - tesEnemy.getX() > 0){
+                //ke kanan
+                tesEnemy.setVelocityXY(tesEnemySpeed,0);
+            }else if(x1tujuan - tesEnemy.getX() < 0){
+                //ke kiri
+                tesEnemy.setVelocityXY(-tesEnemySpeed,0);
             }
         }
 
-
-        //enemy movement
-        //ke kiri
-        tesEnemy.setVelocityXY(-tesEnemySpeed,0);
-        //ke kanan
-        tesEnemy.setVelocityXY(tesEnemySpeed,0);
-        //ke atas
-        tesEnemy.setVelocityXY(0,tesEnemySpeed);
-        //ke bawah
-        tesEnemy.setVelocityXY(0,-tesEnemySpeed);
-
         //ngeset boolean true/false
         for (int i=0; i<arr.size();i++){
-//            jarakenemy1 = Math.sqrt(Math.pow(arr.get(i).getX()-arr.get(tujuan1).getX(),2) + Math.pow(arr.get(i).getY() - arr.get(tujuan).getY(),2));
-            jarakenemy2 = Math.sqrt(Math.pow(tesEnemy2.getX()-arr.get(i).getX(),2) + Math.pow(tesEnemy2.getY() - arr.get(i).getY(),2));
+            jarakenemy1 = Math.sqrt(Math.pow(arr.get(i).getX()-arr.get(enemy1kenode).getX(),2) + Math.pow(arr.get(i).getY() - arr.get(enemy1kenode).getY(),2));
 
-            if(jarakenemy1<64){
-                nodeawalenemy1=i;
-            }
-            if(jarakenemy2<64){
-                nodeawalenemy2=i;
+            if(jarakenemy1==0){
+                reachnode1=true;
             }
         }
 
