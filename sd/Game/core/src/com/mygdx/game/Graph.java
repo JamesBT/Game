@@ -2,20 +2,22 @@ package com.mygdx.game;
 import java.util.*;
 
 public class Graph {
-    private int adjMatrix[][];
-    private int size;
-
-    // Initialize the matrix
-    public Graph(int size) {
-        this.size = size;
-        adjMatrix = new int[size][size];
-    }
-
-    // Add edges
-    public void addEdge(int i, int j) {
-        adjMatrix[i][j] = 1;
-        adjMatrix[j][i] = 1;
-    }
+    private int adjMatrix[][] = {
+            //0 1  2  3  4  5  6  7  8  9 10 11 -->node ke
+            {0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0},
+            {1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0},
+            {0, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0},
+            {0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0},
+            {0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0},
+            {0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1},
+            {0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0},
+            {0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0},
+            {0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1},
+            {0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0},
+            {0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0},
+    };
+    private int size = 12;
 
     public void printgraph() {
         for (int[] i : adjMatrix) {
@@ -26,11 +28,11 @@ public class Graph {
         }
     }
 
-    public void shortestpath(int awal, int dest) {
+    public ArrayList<Integer> shortestpath(int awal, int dest) {
         int pred[] = new int[this.size];
         if (BFS(awal, dest, pred) == false) {
             System.out.println("error");
-            return;
+            return null;
         }
 
         ArrayList<Integer> path = new ArrayList<Integer>();
@@ -41,11 +43,8 @@ public class Graph {
             crawl = pred[crawl];
         }
 
-
-        System.out.print("Path: ");
-        for (int i = path.size() - 1; i >= 0; i--) {
-            System.out.print(path.get(i) + " ");
-        }
+        Collections.reverse(path);
+        return path;
 
     }
 

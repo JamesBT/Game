@@ -43,9 +43,12 @@ public class GameScreen extends BaseScreen {
     private Nodes node11;
     private int tujuan;
     private int nodeawalenemy1;
+    private int enemy1kenode;
     private int nodeawalenemy2;
-    private ArrayList<Nodes> pathenemy1;
-    private ArrayList<Nodes> pathenemy2;
+    private int enemy2kenode;
+    private ArrayList<Integer> pathenemy1;
+    private ArrayList<Integer> pathenemy2;
+    private Graph graf;
 
     //buat peta
     private TiledMap tiledMap;
@@ -76,7 +79,8 @@ public class GameScreen extends BaseScreen {
     private Animation<TextureRegion> animationRight;
     private Animation<TextureRegion> animationUp;
     private Animation<TextureRegion> animationDown;
-    boolean reachnode = false;
+    boolean reachnode1 = false;
+    boolean reachnode2 = false;
 
     //buat asset tambahan
     BitmapFont bitmapFont;
@@ -171,7 +175,8 @@ public class GameScreen extends BaseScreen {
         node9 = new Nodes();
         node10 = new Nodes();
         node11 = new Nodes();
-
+        pathenemy1 = new ArrayList<>();
+        pathenemy2 = new ArrayList<>();
 
         //buat object dalam peta
         MapObjects objects = tiledMap.getLayers().get("Object").getObjects();
@@ -261,22 +266,8 @@ public class GameScreen extends BaseScreen {
             wallList.add(solid);
         }
 
-        //matrix nodes
-        int[][] matrix = {
-                //0 1  2  3  4  5  6  7  8  9 10 11 -->node ke
-                {0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0},
-                {1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0},
-                {0, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0},
-                {0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0},
-                {0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0},
-                {0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1},
-                {0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0},
-                {0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0},
-                {0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1},
-                {0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0},
-                {0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0},
-        };
+        //buat graph
+        graf = new Graph();
     }
 
     @Override
@@ -379,7 +370,36 @@ public class GameScreen extends BaseScreen {
                 nodeawalenemy2=i;
             }
         }
-        System.out.println(tujuan);
+        //enemy1 = bfs
+        pathenemy1 = graf.shortestpath(nodeawalenemy1,tujuan);
+        //enemy2 = dfs
+//        pathenemy2 = graf.shortestpath(nodeawalenemy2,tujuan);
+        if(reachnode1) {
+            int tujuan = pathenemy1.get(0);
+            pathenemy1.remove(0);
+        }
+        //enemy movement
+        //ke kiri
+        tesEnemy.setVelocityXY(-tesEnemySpeed,0);
+        //ke kanan
+        tesEnemy.setVelocityXY(tesEnemySpeed,0);
+        //ke atas
+        tesEnemy.setVelocityXY(0,tesEnemySpeed);
+        //ke bawah
+        tesEnemy.setVelocityXY(0,-tesEnemySpeed);
+
+        //ngeset boolean true/false
+        for (int i=0; i<arr.size();i++){
+            jarakenemy1 = Math.sqrt(Math.pow(tesEnemy.getX()-arr.get(i).getX(),2) + Math.pow(tesEnemy.getY() - arr.get(i).getY(),2));
+            jarakenemy2 = Math.sqrt(Math.pow(tesEnemy2.getX()-arr.get(i).getX(),2) + Math.pow(tesEnemy2.getY() - arr.get(i).getY(),2));
+
+            if(jarakenemy1<64){
+                nodeawalenemy1=i;
+            }
+            if(jarakenemy2<64){
+                nodeawalenemy2=i;
+            }
+        }
 
         //hitung jarak atr player dan musuh
         double jrkx1 = Math.abs(player.getX() - tesEnemy.getX());
@@ -399,18 +419,9 @@ public class GameScreen extends BaseScreen {
 //            tesEnemy2.setVisible(false);
 //        }
 
-        //enemy movement
-        //ke kiri
-        tesEnemy.setVelocityXY(-tesEnemySpeed,0);
-        //ke kanan
-        tesEnemy.setVelocityXY(tesEnemySpeed,0);
-        //ke atas
-        tesEnemy.setVelocityXY(0,tesEnemySpeed);
-        //ke bawah
-        tesEnemy.setVelocityXY(0,-tesEnemySpeed);
 
-        System.out.println("player x: "+player.getX());
-        System.out.println("player y: "+player.getY());
+//        System.out.println("player x: "+player.getX());
+//        System.out.println("player y: "+player.getY());
 //        System.out.println("enemy x: "+tesEnemy.getX());
 //        System.out.println("enemy y: "+tesEnemy.getY());
 
