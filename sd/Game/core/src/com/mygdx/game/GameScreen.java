@@ -49,6 +49,10 @@ public class GameScreen extends BaseScreen {
     private ArrayList<Integer> pathenemy1;
     private ArrayList<Integer> pathenemy2;
     private Graph graf;
+    private boolean x1sama;
+    private boolean x2sama;
+    private boolean y1sama;
+    private boolean y2sama;
 
     //buat peta
     private TiledMap tiledMap;
