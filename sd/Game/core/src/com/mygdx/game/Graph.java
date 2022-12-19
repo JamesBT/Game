@@ -41,10 +41,12 @@ public class Graph {
             crawl = pred[crawl];
         }
 
+
         System.out.print("Path: ");
         for (int i = path.size() - 1; i >= 0; i--) {
             System.out.print(path.get(i) + " ");
         }
+
     }
 
     private boolean BFS(int awal, int dest, int pred[]) {
@@ -78,23 +80,50 @@ public class Graph {
         return false;
     }
 
-    private void DFS(int awal){
+    private void DFS(int awal, int dest){
         boolean visited[] = new boolean[this.size];
-        for (int i = 0; i < this.size; i++) {
-            visited[i] = false;
-        }
-        this.DFS2(awal, visited);
+
+        ArrayList<Integer> shortest = this.DFS2(awal, dest, visited);
+
+        if (shortest.size() !=0){
+            for (int i=0; i<shortest.size()-1; i++){
+                System.out.print(shortest.get(i)+", ");
+            }
+            System.out.println(shortest.get(-1));
+        }else
+            System.out.println("no other route found");
     }
 
-    private boolean DFS2(int awal, boolean[] visited) {
-        visited[awal] = true;
+    private ArrayList<Integer> DFS2(int awal, int dest, boolean[] visited) {
+        ArrayList<Integer> temp = new ArrayList<Integer>();
+        ArrayList<Integer> shortest = new ArrayList<Integer>();
 
-        for (int i = 0; i < adjMatrix[awal].length; i++) {
-            if (adjMatrix[awal][i] == 1 && visited[i] == false) {
-                visited[i] = true;
-                this.DFS2(i, visited);
+        int count  = 0;
+        count+=1;
+        int min = 0;
+        visited[awal] = true;
+        temp.add(awal);
+
+        if (awal != dest){
+            for (int i=0; i<adjMatrix[awal].length; i++){
+                if (adjMatrix[awal][i] == 1){
+                    if (visited[i] != true){
+                        this.DFS2(i, dest, visited);
+                        visited[i] = false;
+                        temp.remove(0);
+                        count+=1;
+                    }
+                }
+            }
+        }else {
+            if (min == 0){
+                min = count;
+                shortest = (ArrayList<Integer>)temp.clone();
+            } else if (count<min) {
+                min = count;
+                shortest = (ArrayList<Integer>)temp.clone();
             }
         }
-        return false;
+        return shortest;
     }
 }
