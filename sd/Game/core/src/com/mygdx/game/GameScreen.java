@@ -42,8 +42,10 @@ public class GameScreen extends BaseScreen {
     private Nodes node10;
     private Nodes node11;
     private int tujuan;
-
-
+    private int nodeawalenemy1;
+    private int nodeawalenemy2;
+    private ArrayList<Nodes> pathenemy1;
+    private ArrayList<Nodes> pathenemy2;
 
     //buat peta
     private TiledMap tiledMap;
@@ -359,12 +361,22 @@ public class GameScreen extends BaseScreen {
         arr.add(node10);
         arr.add(node11);
 
-        double jarakterdekat = 10000;
+        //ini buat player
         double jarak = 0;
+        double jarakenemy1 = 0;
+        double jarakenemy2 = 0;
         for (int i=0; i<arr.size();i++){
             jarak = Math.sqrt(Math.pow(player.getX()-arr.get(i).getX(),2) + Math.pow(player.getY() - arr.get(i).getY(),2));
+            jarakenemy1 = Math.sqrt(Math.pow(tesEnemy.getX()-arr.get(i).getX(),2) + Math.pow(tesEnemy.getY() - arr.get(i).getY(),2));
+            jarakenemy2 = Math.sqrt(Math.pow(tesEnemy2.getX()-arr.get(i).getX(),2) + Math.pow(tesEnemy2.getY() - arr.get(i).getY(),2));
             if(jarak<64){
                 tujuan = i;
+            }
+            if(jarakenemy1<64){
+                nodeawalenemy1=i;
+            }
+            if(jarakenemy2<64){
+                nodeawalenemy2=i;
             }
         }
         System.out.println(tujuan);
