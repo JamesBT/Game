@@ -382,6 +382,19 @@ public class GameScreen extends BaseScreen {
             int tujuan = pathenemy1.get(0);
             pathenemy1.remove(0);
         }
+
+        for (int i=0; i<arr.size()-1; i++){
+            int tujuan = pathenemy1.get(0);
+            if (arr.get(i).getX() == arr.get(tujuan).getX()){
+                x1sama = true;
+                y1sama = false;
+            } else if (arr.get(i).getY() == arr.get(tujuan).getY()) {
+                x1sama = false;
+                y1sama = true;
+            }
+        }
+
+
         //enemy movement
         //ke kiri
         tesEnemy.setVelocityXY(-tesEnemySpeed,0);
