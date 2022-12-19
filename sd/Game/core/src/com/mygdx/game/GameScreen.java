@@ -392,6 +392,7 @@ public class GameScreen extends BaseScreen {
             pathenemy1.remove(0);
         }
 
+        //enemy1
         for (int i=0; i<arr.size()-1; i++){
             if (arr.get(i).getX() == arr.get(enemy1kenode).getX()){
                 x1sama = true;
@@ -403,6 +404,21 @@ public class GameScreen extends BaseScreen {
                 x1tujuan = arr.get(i).getX();
             }
         }
+
+//        //enemy2
+//        for (int i=0; i<arr.size()-1; i++){
+//            if (arr.get(i).getX() == arr.get(enemy2kenode).getX()){
+//                x2sama = true;
+//                y2sama = false;
+//                y2tujuan=arr.get(i).getY();
+//            } else if (arr.get(i).getY() == arr.get(enemy2kenode).getY()) {
+//                x2sama = false;
+//                y2sama = true;
+//                x2tujuan = arr.get(i).getX();
+//            }
+//        }
+
+
         //buat movement enemy1
         if(x1sama){
             if(y1tujuan - tesEnemy.getY() > 0){
