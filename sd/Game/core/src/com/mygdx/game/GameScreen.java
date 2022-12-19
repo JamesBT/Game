@@ -272,6 +272,10 @@ public class GameScreen extends BaseScreen {
 
         //buat graph
         graf = new Graph();
+        enemy1kenode=0;
+        enemy2kenode=10;
+        reachnode1=true;
+        reachnode2=true;
     }
 
     @Override
@@ -379,16 +383,16 @@ public class GameScreen extends BaseScreen {
         //enemy2 = dfs
 //        pathenemy2 = graf.shortestpath(nodeawalenemy2,tujuan);
         if(reachnode1) {
-            int tujuan = pathenemy1.get(0);
+            enemy1kenode = pathenemy1.get(0);
+            reachnode1=false;
             pathenemy1.remove(0);
         }
 
         for (int i=0; i<arr.size()-1; i++){
-            int tujuan = pathenemy1.get(0);
-            if (arr.get(i).getX() == arr.get(tujuan).getX()){
+            if (arr.get(i).getX() == arr.get(enemy1kenode).getX()){
                 x1sama = true;
                 y1sama = false;
-            } else if (arr.get(i).getY() == arr.get(tujuan).getY()) {
+            } else if (arr.get(i).getY() == arr.get(enemy1kenode).getY()) {
                 x1sama = false;
                 y1sama = true;
             }
@@ -407,7 +411,7 @@ public class GameScreen extends BaseScreen {
 
         //ngeset boolean true/false
         for (int i=0; i<arr.size();i++){
-            jarakenemy1 = Math.sqrt(Math.pow(tesEnemy.getX()-arr.get(i).getX(),2) + Math.pow(tesEnemy.getY() - arr.get(i).getY(),2));
+//            jarakenemy1 = Math.sqrt(Math.pow(arr.get(i).getX()-arr.get(tujuan1).getX(),2) + Math.pow(arr.get(i).getY() - arr.get(tujuan).getY(),2));
             jarakenemy2 = Math.sqrt(Math.pow(tesEnemy2.getX()-arr.get(i).getX(),2) + Math.pow(tesEnemy2.getY() - arr.get(i).getY(),2));
 
             if(jarakenemy1<64){
