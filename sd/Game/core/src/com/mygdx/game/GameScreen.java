@@ -49,6 +49,8 @@ public class GameScreen extends BaseScreen {
     private ArrayList<Integer> pathenemy1;
     private ArrayList<Integer> pathenemy2;
     private Graph graf;
+    private boolean bfs1;
+    private boolean dfs2;
     private boolean x1sama;
     private boolean x2sama;
     private boolean y1sama;
@@ -280,6 +282,8 @@ public class GameScreen extends BaseScreen {
         enemy2kenode=10;
         reachnode1=true;
         reachnode2=true;
+        bfs1=true;
+        dfs2=true;
     }
 
     @Override
@@ -382,27 +386,31 @@ public class GameScreen extends BaseScreen {
                 nodeawalenemy2=i;
             }
         }
-        //enemy1 = bfs
-        pathenemy1 = graf.shortestpath(nodeawalenemy1,tujuan);
-        //enemy2 = dfs
-//        pathenemy2 = graf.shortestpath(nodeawalenemy2,tujuan);
-        if(reachnode1) {
-            enemy1kenode = pathenemy1.get(0);
-            reachnode1=false;
-            pathenemy1.remove(0);
+        if(bfs1) {
+            pathenemy1 = graf.shortestpath(nodeawalenemy1, tujuan);
+            bfs1 = false;
+        }
+        if(pathenemy1.size() == 1){
+            bfs1 = true;
         }
 
-        for (int i=0; i<arr.size()-1; i++){
-            if (arr.get(i).getX() == arr.get(enemy1kenode).getX()){
-                x1sama = true;
-                y1sama = false;
-                y1tujuan=arr.get(i).getY();
-            } else if (arr.get(i).getY() == arr.get(enemy1kenode).getY()) {
-                x1sama = false;
-                y1sama = true;
-                x1tujuan = arr.get(i).getX();
-            }
+        if(reachnode1){
+            enemy1kenode = pathenemy1.get(0);
+            pathenemy1.remove(0);
+            reachnode1 = false;
         }
+
+        //berada pada x sama maka jalan y
+        if(arr.get(enemy1kenode).getX() == arr.get(pathenemy1.get(0)).getX()){
+            x1sama=true;
+            y1sama=false;
+            y1tujuan=arr.get(pathenemy1.get(0)).getY();
+        }else if(arr.get(enemy1kenode).getY() == arr.get(pathenemy1.get(0)).getY()){
+            x1sama=false;
+            y1sama=true;
+            x1tujuan=arr.get(pathenemy1.get(0)).getX();
+        }
+
         //buat movement enemy1
         if(x1sama){
             if(y1tujuan - tesEnemy.getY() > 0){
@@ -422,14 +430,70 @@ public class GameScreen extends BaseScreen {
             }
         }
 
-        //ngeset boolean true/false
-        for (int i=0; i<arr.size();i++){
-            jarakenemy1 = Math.sqrt(Math.pow(arr.get(i).getX()-arr.get(enemy1kenode).getX(),2) + Math.pow(arr.get(i).getY() - arr.get(enemy1kenode).getY(),2));
-
-            if(jarakenemy1==0){
-                reachnode1=true;
+        if(x1sama){
+            if(tesEnemy.getY()-arr.get(enemy1kenode).getY() < 32){
+                reachnode1 = true;
+            }
+        }else if(y1sama){
+            if(tesEnemy.getX()-arr.get(enemy1kenode).getX() < 32){
+                reachnode1 = true;
             }
         }
+        System.out.println(enemy1kenode);
+//        //enemy1 = bfs
+//        if(bfs1) {
+//            pathenemy1 = graf.shortestpath(nodeawalenemy1, tujuan);
+//            bfs1=false;
+//        }
+//
+//        if(pathenemy1.size() == 0){
+//            bfs1=true;
+//        }
+//        //enemy2 = dfs
+////        pathenemy2 = graf.shortestpath(nodeawalenemy2,tujuan);
+//        if(reachnode1) {
+//            enemy1kenode = pathenemy1.get(0);
+//            reachnode1=false;
+//            pathenemy1.remove(0);
+//        }
+//
+//        for (int i=0; i<arr.size()-1; i++){
+//            if (arr.get(i).getX() == arr.get(enemy1kenode).getX()){
+//                x1sama = true;
+//                y1sama = false;
+//                y1tujuan=arr.get(i).getY();
+//                break;
+//            } else if (arr.get(i).getY() == arr.get(enemy1kenode).getY()) {
+//                x1sama = false;
+//                y1sama = true;
+//                x1tujuan = arr.get(i).getX();
+//                break;
+//            }
+//        }
+//        //buat movement enemy1
+//        if(x1sama){
+//            if(y1tujuan - tesEnemy.getY() > 0){
+//                //ke atas
+//                tesEnemy.setVelocityXY(0,tesEnemySpeed);
+//            }else{
+//                //ke bawah
+//                tesEnemy.setVelocityXY(0,-tesEnemySpeed);
+//            }
+//        }else if(y1sama){
+//            if(x1tujuan - tesEnemy.getX() > 0){
+//                //ke kanan
+//                tesEnemy.setVelocityXY(tesEnemySpeed,0);
+//            }else if(x1tujuan - tesEnemy.getX() < 0){
+//                //ke kiri
+//                tesEnemy.setVelocityXY(-tesEnemySpeed,0);
+//            }
+//        }
+//
+//        //set boolean
+//        double jarakketujuan = Math.sqrt(Math.pow(arr.get(pathenemy1.get(0)).getX()-arr.get(enemy1kenode).getX(),2) + Math.pow(arr.get(pathenemy1.get(0)).getY() - arr.get(enemy1kenode).getY(),2));
+//        if(jarakketujuan == 0){
+//            reachnode1=true;
+//        }
 
         //hitung jarak atr player dan musuh
         double jrkx1 = Math.abs(player.getX() - tesEnemy.getX());

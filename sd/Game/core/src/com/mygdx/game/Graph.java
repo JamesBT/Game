@@ -37,15 +37,15 @@ public class Graph {
 
         ArrayList<Integer> path = new ArrayList<Integer>();
         int crawl = dest;
-//        path.add(crawl);
+        path.add(crawl);
         while (pred[crawl] != -1) {
             path.add(pred[crawl]);
             crawl = pred[crawl];
         }
 
         Collections.reverse(path);
+        path.remove(0);
         return path;
-
     }
 
     private boolean BFS(int awal, int dest, int pred[]) {
