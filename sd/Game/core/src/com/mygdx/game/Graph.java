@@ -18,15 +18,10 @@ public class Graph {
             {0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0},
     };
     private int size = 12;
-
-    public void printgraph() {
-        for (int[] i : adjMatrix) {
-            for (int j : i) {
-                System.out.print(j + " ");
-            }
-            System.out.println("");
-        }
-    }
+    private int count  = 0;
+    private int min = 0;
+    private ArrayList<Integer> temp = new ArrayList<Integer>();
+    private ArrayList<Integer> shortest = new ArrayList<Integer>();
 
     public ArrayList<Integer> shortestpath(int awal, int dest) {
         int pred[] = new int[this.size];
@@ -34,7 +29,6 @@ public class Graph {
             System.out.println("error");
             return null;
         }
-
         ArrayList<Integer> path = new ArrayList<Integer>();
         int crawl = dest;
         path.add(crawl);
@@ -42,7 +36,6 @@ public class Graph {
             path.add(pred[crawl]);
             crawl = pred[crawl];
         }
-
         Collections.reverse(path);
         path.remove(0);
         return path;
@@ -79,45 +72,31 @@ public class Graph {
         return false;
     }
 
-    private void DFS(int awal, int dest){
+    public ArrayList<Integer> DFS(int awal, int dest){
         boolean visited[] = new boolean[this.size];
         for (int i = 0; i < this.size; i++) {
             visited[i] = false;
         }
-
-        ArrayList<Integer> shortest = this.DFS2(awal, dest, visited);
-
-        if (shortest.size() !=0){
-            for (int i=0; i<shortest.size()-1; i++){
-                System.out.print(shortest.get(i)+", ");
-            }
-            System.out.println(shortest.get(-1));
-        }else
-            System.out.println("no other route found");
+        shortest = DFS2(awal, dest, visited);
+        System.out.println(shortest);
+        return shortest;
     }
 
     private ArrayList<Integer> DFS2(int awal, int dest, boolean[] visited) {
-        ArrayList<Integer> temp = new ArrayList<Integer>();
-        ArrayList<Integer> shortest = new ArrayList<Integer>();
-
-        int count  = 0;
         count+=1;
-        int min = 0;
         visited[awal] = true;
         temp.add(awal);
 
         if (awal != dest){
-            for (int i=0; i<adjMatrix[awal].length; i++){
+            for (int i=0; i<adjMatrix[awal].length-1; i++){
                 if (adjMatrix[awal][i] == 1){
                     if (visited[i] != true){
                         this.DFS2(i, dest, visited);
-                        visited[i] = false;
-                        temp.remove(0);
-                        count-=1;
                     }
                 }
             }
-        }else {
+        }
+        else {
             if (min == 0){
                 min = count;
                 shortest = (ArrayList<Integer>)temp.clone();
