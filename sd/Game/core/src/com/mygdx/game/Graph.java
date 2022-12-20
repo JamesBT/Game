@@ -79,11 +79,11 @@ public class Graph {
         return false;
     }
 
-    private void DFS(int awal, int dest){
-        boolean visited[] = new boolean[this.size];
+    public void DFS(int awal, int dest){
+        boolean visited[] = new boolean[12];
 
         ArrayList<Integer> shortest = this.DFS2(awal, dest, visited);
-
+        System.out.println(shortest);
         if (shortest.size() !=0){
             for (int i=0; i<shortest.size()-1; i++){
                 System.out.print(shortest.get(i)+", ");
@@ -110,7 +110,7 @@ public class Graph {
                         this.DFS2(i, dest, visited);
                         visited[i] = false;
                         temp.remove(0);
-                        count+=1;
+                        count-=1;
                     }
                 }
             }

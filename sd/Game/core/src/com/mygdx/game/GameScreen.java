@@ -48,14 +48,17 @@ public class GameScreen extends BaseScreen {
     private ArrayList<Integer> pathenemy1;
     private ArrayList<Integer> pathenemy2;
     private Graph graf;
-    private boolean x1sama;
-    private boolean x2sama;
-    private boolean y1sama;
-    private boolean y2sama;
-    private int x1tujuan;
-    private int x2tujuan;
-    private int y1tujuan;
-    private int y2tujuan;
+    //logic win
+    private boolean playerenemy1;
+    private boolean playerenemy2;
+    private boolean enemy1player;
+    private boolean enemy1enemy2;
+    private boolean enemy2player;
+    //buat score
+    private ArrayList<String> targetplayer;
+    private String targetpl;
+    private ArrayList<String> targetenemy1;
+    private ArrayList<String> targetenemy2;
 
     //buat peta
     private TiledMap tiledMap;
@@ -257,7 +260,6 @@ public class GameScreen extends BaseScreen {
                 default:
                     System.err.println("Unknown tilemap object " + name);
             }
-
         }
 
         //buat tembok
@@ -275,10 +277,31 @@ public class GameScreen extends BaseScreen {
 
         //buat graph
         graf = new Graph();
+//        graf.DFS(0,6);
         enemy1kenode=0;
         enemy2kenode=10;
         reachnode1=true;
         reachnode2=true;
+
+        //buat score
+        targetpl="Target: ";
+        targetplayer = new ArrayList<String>();
+        targetplayer.add("enemy1");
+        targetplayer.add("enemy2");
+
+        batch.begin();
+        bitmapFont.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+        bitmapFont.draw(batch,targetpl,15,450);
+        bitmapFont.draw(batch,targetplayer.get(0),45,450);
+        bitmapFont.draw(batch,targetplayer.get(1), 75, 450);
+        batch.end();
+
+        //buat win/lose
+        playerenemy1=false;
+        playerenemy2=false;
+        enemy1player=false;
+        enemy1enemy2=false;
+        enemy2player=false;
     }
 
     @Override
@@ -323,10 +346,66 @@ public class GameScreen extends BaseScreen {
         }
 
         //Overlaps Player and Enemy
-//        if(player.overlaps(tesEnemy, false) || player.overlaps(tesEnemy2, false)){
-//            game.setScreen(new GameOver(game));
-//            bgm.stop();
+        if(player.overlaps(tesEnemy, false)){
+            enemy1player=true;
+        }
+        if(player.overlaps(tesEnemy2,false)){
+            enemy2player=true;
+        }
+        if(tesEnemy.overlaps(tesEnemy2,false)||tesEnemy2.overlaps(tesEnemy,false)){
+            enemy1enemy2=true;
+        }
+        //jarak ke enemy1
+        double jarakplayerenemy1 = Math.sqrt(Math.pow(player.getX()-tesEnemy.getX(),2) + Math.pow(player.getY() - tesEnemy.getY(),2));
+        if(jarakplayerenemy1<128){
+            playerenemy1=true;
+            System.out.println("ENEMY1");
+            targetplayer.remove("enemy1");
+        }
+        double jarakplayerenemy2 = Math.sqrt(Math.pow(player.getX()-tesEnemy2.getX(),2) + Math.pow(player.getY() - tesEnemy2.getY(),2));
+        if(jarakplayerenemy2<128){
+            playerenemy2=true;
+            System.out.println("ENEMY2");
+            targetplayer.remove("enemy2");
+        }
+
+
+        //visible atau tidak
+        //hitung jarak antara player dan musuh
+        double jrk1 = Math.sqrt(Math.pow(player.getX()-tesEnemy.getX(),2) + Math.pow(player.getY() - tesEnemy.getY(),2));
+        double jrk2 = Math.sqrt(Math.pow(player.getX()-tesEnemy2.getX(),2) + Math.pow(player.getY() - tesEnemy2.getY(),2));
+        //buat enemy1 keliatan/tidak
+//        if(jrk1 < 128){
+//            tesEnemy.setVisible(true);
+//        }else{
+//            tesEnemy.setVisible(false);
 //        }
+//        //buat enemy2 keliatan/tidak
+//        if(jrk2 < 128){
+//            tesEnemy2.setVisible(true);
+//        }else{
+//            tesEnemy2.setVisible(false);
+//        }
+
+
+        //win/lose
+        //win
+        if(targetplayer.size()==0){
+            game.setScreen(new WinningScreen(game));
+            bgm.stop();
+        }else if(playerenemy1&&playerenemy2){
+            game.setScreen(new WinningScreen(game));
+            bgm.stop();
+        }
+        //lose/gameover
+        if(enemy1player&&enemy1enemy2){
+            game.setScreen(new GameOverScreen(game));
+            bgm.stop();
+        }
+        if(enemy2player&&enemy1enemy2){
+            game.setScreen(new GameOverScreen(game));
+            bgm.stop();
+        }
 
         //camera adjustment
         Camera mainCamera = mainStage.getCamera();
@@ -385,68 +464,40 @@ public class GameScreen extends BaseScreen {
         pathenemy1 = graf.shortestpath(nodeawalenemy1,tujuan);
         //enemy2 = dfs
 //        pathenemy2 = graf.shortestpath(nodeawalenemy2,tujuan);
-        if(reachnode1) {
-            enemy1kenode = pathenemy1.get(0);
-            reachnode1=false;
-            pathenemy1.remove(0);
-        }
-
-        for (int i=0; i<arr.size()-1; i++){
-            if (arr.get(i).getX() == arr.get(enemy1kenode).getX()){
-                x1sama = true;
-                y1sama = false;
-                y1tujuan=arr.get(i).getY();
-            } else if (arr.get(i).getY() == arr.get(enemy1kenode).getY()) {
-                x1sama = false;
-                y1sama = true;
-                x1tujuan = arr.get(i).getX();
+        //enemy movement
+        System.out.println(pathenemy1);
+        if(Math.abs(tesEnemy.getX()-player.getX())>1 || Math.abs(tesEnemy.getY()-player.getY())>1){
+            System.out.println("ASDJAHDJKSA");
+            if(reachnode1) {
+                enemy1kenode = pathenemy1.get(0);
+                pathenemy1.remove(0);
+                reachnode1=false;
             }
-        }
-        //buat movement enemy1
-        if(x1sama){
-            if(y1tujuan - tesEnemy.getY() > 0){
-                //ke atas
-                tesEnemy.setVelocityXY(0,tesEnemySpeed);
-            }else{
-                //ke bawah
-                tesEnemy.setVelocityXY(0,-tesEnemySpeed);
+            //enemy movement
+            if(Math.abs(tesEnemy.getX()-arr.get(enemy1kenode).getX())<5){
+                if(tesEnemy.getY()-arr.get(enemy1kenode).getY()>0){
+                    //ke bawah
+                    tesEnemy.setVelocityXY(0,-tesEnemySpeed);
+                }else if(tesEnemy.getY()-arr.get(enemy1kenode).getY()<0){
+                    //ke atas
+                    tesEnemy.setVelocityXY(0,tesEnemySpeed);
+                }
             }
-        }else if(y1sama){
-            if(x1tujuan - tesEnemy.getX() > 0){
-                //ke kanan
-                tesEnemy.setVelocityXY(tesEnemySpeed,0);
-            }else if(x1tujuan - tesEnemy.getX() < 0){
-                //ke kiri
-                tesEnemy.setVelocityXY(-tesEnemySpeed,0);
+            if(Math.abs(tesEnemy.getY()-arr.get(enemy1kenode).getY())<5){
+                if(tesEnemy.getX()-arr.get(enemy1kenode).getX()>0){
+                    //ke kiri
+                    tesEnemy.setVelocityXY(-tesEnemySpeed,0);
+                }else if(tesEnemy.getX()-arr.get(enemy1kenode).getX()<0){
+                    //ke kanan
+                    tesEnemy.setVelocityXY(tesEnemySpeed,0);
+                }
             }
-        }
-
-        //ngeset boolean true/false
-        for (int i=0; i<arr.size();i++){
-            jarakenemy1 = Math.sqrt(Math.pow(arr.get(i).getX()-arr.get(enemy1kenode).getX(),2) + Math.pow(arr.get(i).getY() - arr.get(enemy1kenode).getY(),2));
-
-            if(jarakenemy1==0){
+            //beda1px dengan tujuan tidak bisa pas 0
+            if(Math.abs(tesEnemy.getX()-arr.get(enemy1kenode).getX())<2 && Math.abs(tesEnemy.getY()-arr.get(enemy1kenode).getY())<2){
                 reachnode1=true;
             }
         }
 
-        //hitung jarak atr player dan musuh
-        double jrkx1 = Math.abs(player.getX() - tesEnemy.getX());
-        double jrky1 = Math.abs(player.getY() - tesEnemy.getY());
-        double jrkx2 = Math.abs(player.getX() - tesEnemy2.getX());
-        double jrky2 = Math.abs(player.getY() - tesEnemy2.getY());
-        //buat musuhe keliatan/tidak
-//        if(jrkx1 < 128 && jrky1 < 128){
-//            tesEnemy.setVisible(true);
-//        }else{
-//            tesEnemy.setVisible(false);
-//        }
-        //buat musuhe keliatan/tidak
-//        if(jrkx2 < 128 && jrky2 < 128){
-//            tesEnemy2.setVisible(true);
-//        }else{
-//            tesEnemy2.setVisible(false);
-//        }
 
 
 //        System.out.println("player x: "+player.getX());
