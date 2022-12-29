@@ -2,7 +2,7 @@ package com.mygdx.game;
 import java.util.*;
 
 public class Graph {
-    private int adjMatrix[][] = {
+    private int[][] adjMatrix = {
             //0 1  2  3  4  5  6  7  8  9 10 11 -->node ke
             {0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0},
             {1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0},
@@ -18,14 +18,14 @@ public class Graph {
             {0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0},
     };
     private int size = 12;
-    private int count  = 0;
-    private int min = 0;
-    private ArrayList<Integer> temp = new ArrayList<Integer>();
-    private ArrayList<Integer> shortest = new ArrayList<Integer>();
+    private int min;
+    private int count;
+    private ArrayList<Integer> temp;
+    private ArrayList<Integer> shortest;
 
     public ArrayList<Integer> shortestpath(int awal, int dest) {
-        int pred[] = new int[this.size];
-        if (BFS(awal, dest, pred) == false) {
+        int[] pred = new int[this.size];
+        if (!BFS(awal, dest, pred)) {
             System.out.println("error");
             return null;
         }
@@ -41,9 +41,9 @@ public class Graph {
         return path;
     }
 
-    private boolean BFS(int awal, int dest, int pred[]) {
+    private boolean BFS(int awal, int dest, int[] pred) {
         ArrayList<Integer> queue = new ArrayList<Integer>();
-        boolean visited[] = new boolean[this.size];
+        boolean[] visited = new boolean[this.size];
 
         for (int i = 0; i < this.size; i++) {
             visited[i] = false;
@@ -57,7 +57,7 @@ public class Graph {
             int u = queue.get(0);
             queue.remove(0);
             for (int i = 0; i < adjMatrix[u].length; i++) {
-                if (adjMatrix[u][i] == 1 && visited[i] == false) {
+                if (adjMatrix[u][i] == 1 && !visited[i]) {
                     visited[i] = true;
                     pred[i] = u;
                     queue.add(i);
@@ -73,36 +73,39 @@ public class Graph {
     }
 
     public ArrayList<Integer> DFS(int awal, int dest){
-        boolean visited[] = new boolean[this.size];
+        boolean[] visited = new boolean[this.size];
         for (int i = 0; i < this.size; i++) {
             visited[i] = false;
         }
+        count=0;
+        min=0;
+        temp = new ArrayList<>();
+        shortest = new ArrayList<>();
         shortest = DFS2(awal, dest, visited);
-        System.out.println(shortest);
+        shortest.remove(0);
         return shortest;
     }
 
     private ArrayList<Integer> DFS2(int awal, int dest, boolean[] visited) {
-        count+=1;
         visited[awal] = true;
-        temp.add(awal);
-
+        this.temp.add(awal);
         if (awal != dest){
-            for (int i=0; i<adjMatrix[awal].length-1; i++){
+            for (int i=0; i<adjMatrix[awal].length; i++){
                 if (adjMatrix[awal][i] == 1){
                     if (visited[i] != true){
                         this.DFS2(i, dest, visited);
                     }
                 }
             }
+
         }
         else {
             if (min == 0){
                 min = count;
-                shortest = (ArrayList<Integer>)temp.clone();
+                this.shortest = (ArrayList<Integer>)this.temp.clone();
             } else if (count<min) {
                 min = count;
-                shortest = (ArrayList<Integer>)temp.clone();
+                this.shortest = (ArrayList<Integer>)this.temp.clone();
             }
         }
         return shortest;

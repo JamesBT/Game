@@ -48,7 +48,13 @@ public class GameScreen extends BaseScreen {
     private ArrayList<Integer> pathenemy1;
     private ArrayList<Integer> pathenemy2;
     private Graph graf;
+    private Nodes nodetujuan1;
+    private Nodes nodetujuan2;
     //logic win
+    private double jrkenemy1;
+    private double jrkenemy2;
+    private double jrkenemy1enemy2;
+    private double jrkenemy2enemy1;
     private boolean playerenemy1;
     private boolean playerenemy2;
     private boolean enemy1player;
@@ -274,7 +280,6 @@ public class GameScreen extends BaseScreen {
 
         //buat graph
         graf = new Graph();
-//        graf.DFS(0,6);
         enemy1kenode=0;
         enemy2kenode=10;
         reachnode1=true;
@@ -299,13 +304,16 @@ public class GameScreen extends BaseScreen {
         enemy1player=false;
         enemy1enemy2=false;
         enemy2player=false;
+        jrkenemy1=0;
+        jrkenemy2=0;
     }
 
     @Override
     public void update(float delta) {
         //player movement
         float playerSpeed = 500;
-        float tesEnemySpeed = 500;
+        float tesEnemySpeed1 = 700;
+        float tesEnemySpeed2 = 300;
         player.setVelocityXY(0, 0);
         tesEnemy.setVelocityXY(0,0);
         tesEnemy2.setVelocityXY(0,0);
@@ -362,24 +370,6 @@ public class GameScreen extends BaseScreen {
             playerenemy2=true;
         }
 
-
-        //visible atau tidak
-        //hitung jarak antara player dan musuh
-        double jrk1 = Math.sqrt(Math.pow(player.getX()-tesEnemy.getX(),2) + Math.pow(player.getY() - tesEnemy.getY(),2));
-        double jrk2 = Math.sqrt(Math.pow(player.getX()-tesEnemy2.getX(),2) + Math.pow(player.getY() - tesEnemy2.getY(),2));
-        //buat enemy1 keliatan/tidak
-//        if(jrk1 < 128){
-//            tesEnemy.setVisible(true);
-//        }else{
-//            tesEnemy.setVisible(false);
-//        }
-//        //buat enemy2 keliatan/tidak
-//        if(jrk2 < 128){
-//            tesEnemy2.setVisible(true);
-//        }else{
-//            tesEnemy2.setVisible(false);
-//        }
-
         //ngeprint score
         if(playerenemy1 && !playerenemy2){
             targetplayer="Target: enemy2";
@@ -398,6 +388,24 @@ public class GameScreen extends BaseScreen {
         }
 
         //win/lose
+        //hitung jarak antara musuh dan player
+        jrkenemy1 = Math.sqrt(Math.pow(player.getX()-tesEnemy.getX(),2) + Math.pow(player.getY() - tesEnemy.getY(),2));
+        if(jrkenemy1 < 128)
+            playerenemy1= true;
+        if(jrkenemy1 < 96)
+            enemy1player= true;
+
+        jrkenemy2 = Math.sqrt(Math.pow(player.getX()-tesEnemy2.getX(),2) + Math.pow(player.getY() - tesEnemy2.getY(),2));
+        if(jrkenemy1 < 128)
+            playerenemy1= true;
+        if(jrkenemy1 < 160)
+            enemy2player= true;
+
+        //hitung jarak antara enemy1 dan enemy2
+        jrkenemy1enemy2 = Math.sqrt(Math.pow(tesEnemy.getX()-tesEnemy2.getX(),2) + Math.pow(tesEnemy.getY() - tesEnemy2.getY(),2));
+        if(jrkenemy1enemy2 < 128)
+            enemy1enemy2 = true;
+
         //win
         if(playerenemy1&&playerenemy2){
             game.setScreen(new WinningScreen(game));
@@ -421,10 +429,8 @@ public class GameScreen extends BaseScreen {
         mainCamera.position.y = player.getY() + player.getOriginY();
 
         //bound camera to layout
-        mainCamera.position.x = MathUtils.clamp(
-                mainCamera.position.x, viewWidth / 2, mapWidth - viewWidth / 2);
-        mainCamera.position.y = MathUtils.clamp(
-                mainCamera.position.y, viewHeight / 2, mapHeight - viewHeight / 2);
+        mainCamera.position.x = MathUtils.clamp(mainCamera.position.x, viewWidth / 2, mapWidth - viewWidth / 2);
+        mainCamera.position.y = MathUtils.clamp(mainCamera.position.y, viewHeight / 2, mapHeight - viewHeight / 2);
         mainCamera.update();
 
         //adjust tilemap camera to stay in sync with main camera
@@ -466,6 +472,7 @@ public class GameScreen extends BaseScreen {
                 nodeawalenemy2=i;
             }
         }
+
         //gerak enemy1
         if(nodeawalenemy1 != tujuan){
             pathenemy1 = graf.shortestpath(nodeawalenemy1,tujuan);
@@ -481,19 +488,19 @@ public class GameScreen extends BaseScreen {
                 if(Math.abs(tesEnemy.getX()-arr.get(enemy1kenode).getX())<5){
                     if(tesEnemy.getY()-arr.get(enemy1kenode).getY()>0){
                         //ke bawah
-                        tesEnemy.setVelocityXY(0,-tesEnemySpeed);
+                        tesEnemy.setVelocityXY(0,-tesEnemySpeed1);
                     }else if(tesEnemy.getY()-arr.get(enemy1kenode).getY()<0){
                         //ke atas
-                        tesEnemy.setVelocityXY(0,tesEnemySpeed);
+                        tesEnemy.setVelocityXY(0,tesEnemySpeed1);
                     }
                 }
                 if(Math.abs(tesEnemy.getY()-arr.get(enemy1kenode).getY())<5){
                     if(tesEnemy.getX()-arr.get(enemy1kenode).getX()>0){
                         //ke kiri
-                        tesEnemy.setVelocityXY(-tesEnemySpeed,0);
+                        tesEnemy.setVelocityXY(-tesEnemySpeed1,0);
                     }else if(tesEnemy.getX()-arr.get(enemy1kenode).getX()<0){
                         //ke kanan
-                        tesEnemy.setVelocityXY(tesEnemySpeed,0);
+                        tesEnemy.setVelocityXY(tesEnemySpeed1,0);
                     }
                 }
                 //beda1px dengan tujuan tidak bisa pas 0
@@ -503,32 +510,38 @@ public class GameScreen extends BaseScreen {
             }
         }else{
             //sesuaikan sama node
-//            Math.abs(tesEnemy.getX()-player.getX())
-            if(Math.abs(tesEnemy.getX()-player.getX())>1){
-                if(tesEnemy.getY()-player.getY()>0){
-                    //ke bawah
-                    tesEnemy.setVelocityXY(0,-tesEnemySpeed);
-                }else if(tesEnemy.getY()-player.getY()<0){
-                    //ke atas
-                    tesEnemy.setVelocityXY(0,tesEnemySpeed);
+            for(int k=0;k<arr.size();k++){
+                if(k== tujuan){
+                    nodetujuan1 = arr.get(k);
                 }
             }
-            if(Math.abs(tesEnemy.getY()-player.getY())>1){
-                if(tesEnemy.getX()-player.getX()>0){
+            if(Math.abs(tesEnemy.getX()-nodetujuan1.getX())>1){
+                if(tesEnemy.getY()-nodetujuan1.getY()>0){
+                    //ke bawah
+                    tesEnemy.setVelocityXY(0,-tesEnemySpeed1);
+                }else if(tesEnemy.getY()-nodetujuan1.getY()<0){
+                    //ke atas
+                    tesEnemy.setVelocityXY(0,tesEnemySpeed1);
+                }
+            }
+            if(Math.abs(tesEnemy.getY()-nodetujuan1.getY())>1){
+                if(tesEnemy.getX()-nodetujuan1.getX()>0){
                     //ke kiri
-                    tesEnemy.setVelocityXY(-tesEnemySpeed,0);
-                }else if(tesEnemy.getX()-player.getX()<0){
+                    tesEnemy.setVelocityXY(-tesEnemySpeed1,0);
+                }else if(tesEnemy.getX()-nodetujuan1.getX()<0){
                     //ke kanan
-                    tesEnemy.setVelocityXY(tesEnemySpeed,0);
+                    tesEnemy.setVelocityXY(tesEnemySpeed1,0);
                 }
             }
         }
+
+        System.out.println(tesEnemy2.getX()+" "+tesEnemy2.getY());
+
         //gerak enemy2
         if(nodeawalenemy2 != tujuan){
-            System.out.println(nodeawalenemy2);
-            System.out.println(tujuan);
-            pathenemy2 = graf.DFS(nodeawalenemy2,tujuan);
-            System.out.println(pathenemy2);
+            if(pathenemy2.size() == 0)
+                pathenemy2 = graf.DFS(nodeawalenemy2,tujuan);
+            System.out.println(pathenemy2.size());
             if(Math.abs(tesEnemy2.getX()-player.getX())>1 || Math.abs(tesEnemy2.getY()-player.getY())>1){
                 if(reachnode2) {
                     if(pathenemy2.size()!=0) {
@@ -537,23 +550,24 @@ public class GameScreen extends BaseScreen {
                     }
                     reachnode2=false;
                 }
+                System.out.println(arr.get(enemy2kenode).getX()+" tujuan "+arr.get(enemy2kenode).getX());
                 //enemy movement
                 if(Math.abs(tesEnemy2.getX()-arr.get(enemy2kenode).getX())<5){
                     if(tesEnemy2.getY()-arr.get(enemy2kenode).getY()>0){
                         //ke bawah
-                        tesEnemy2.setVelocityXY(0,-tesEnemySpeed);
+                        tesEnemy2.setVelocityXY(0,-tesEnemySpeed2);
                     }else if(tesEnemy2.getY()-arr.get(enemy2kenode).getY()<0){
                         //ke atas
-                        tesEnemy2.setVelocityXY(0,tesEnemySpeed);
+                        tesEnemy2.setVelocityXY(0,tesEnemySpeed2);
                     }
                 }
                 if(Math.abs(tesEnemy2.getY()-arr.get(enemy2kenode).getY())<5){
                     if(tesEnemy2.getX()-arr.get(enemy2kenode).getX()>0){
                         //ke kiri
-                        tesEnemy2.setVelocityXY(-tesEnemySpeed,0);
+                        tesEnemy2.setVelocityXY(-tesEnemySpeed2,0);
                     }else if(tesEnemy2.getX()-arr.get(enemy2kenode).getX()<0){
                         //ke kanan
-                        tesEnemy2.setVelocityXY(tesEnemySpeed,0);
+                        tesEnemy2.setVelocityXY(tesEnemySpeed2,0);
                     }
                 }
                 //beda1px dengan tujuan tidak bisa pas 0
@@ -563,22 +577,27 @@ public class GameScreen extends BaseScreen {
             }
         }else{
             //sesuaikan sama node
-            if(Math.abs(tesEnemy2.getX()-player.getX())>1){
-                if(tesEnemy2.getY()-player.getY()>0){
-                    //ke bawah
-                    tesEnemy2.setVelocityXY(0,-tesEnemySpeed);
-                }else if(tesEnemy2.getY()-player.getY()<0){
-                    //ke atas
-                    tesEnemy2.setVelocityXY(0,tesEnemySpeed);
+            for(int k=0;k<arr.size();k++){
+                if(k== tujuan){
+                    nodetujuan2 = arr.get(k);
                 }
             }
-            if(Math.abs(tesEnemy2.getY()-player.getY())>1){
-                if(tesEnemy2.getX()-player.getX()>0){
+            if(Math.abs(tesEnemy.getX()-nodetujuan2.getX())>1){
+                if(tesEnemy.getY()-nodetujuan2.getY()>0){
+                    //ke bawah
+                    tesEnemy.setVelocityXY(0,-tesEnemySpeed2);
+                }else if(tesEnemy.getY()-nodetujuan2.getY()<0){
+                    //ke atas
+                    tesEnemy.setVelocityXY(0,tesEnemySpeed2);
+                }
+            }
+            if(Math.abs(tesEnemy.getY()-nodetujuan2.getY())>1){
+                if(tesEnemy.getX()-nodetujuan2.getX()>0){
                     //ke kiri
-                    tesEnemy2.setVelocityXY(-tesEnemySpeed,0);
-                }else if(tesEnemy2.getX()-player.getX()<0){
+                    tesEnemy.setVelocityXY(-tesEnemySpeed2,0);
+                }else if(tesEnemy.getX()-nodetujuan2.getX()<0){
                     //ke kanan
-                    tesEnemy2.setVelocityXY(tesEnemySpeed,0);
+                    tesEnemy.setVelocityXY(tesEnemySpeed2,0);
                 }
             }
         }
