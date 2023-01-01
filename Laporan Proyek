@@ -1,2 +1,0 @@
-# Game
-proyek sd
