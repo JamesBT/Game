@@ -1,4 +1,5 @@
-# Game
+# Capture Me Maze Game
+
 Proyek Struktur Data
 
 Kelompok 8
