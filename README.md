@@ -1,7 +1,7 @@
 # Game
-proyek sd
+Proyek Struktur Data
 
-Kelompokk 8
+Kelompok 8
 
 James Berlin(C14210026)
 
