@@ -11,6 +11,6 @@ Sharleen Erlycia(C14210274)
 Trifosa Jesslyn Gracia(C14210289)
 
 
-#Laporan Projek Struktur Data
+# Laporan Projek Struktur Data
 
 # Link Video Teaser
